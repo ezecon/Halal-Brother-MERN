@@ -6,14 +6,14 @@ import {
   TabPanel,
 } from "@material-tailwind/react";
 import AllOrder from "../AllOrder/AllOrder";
-import Inventopry from "../Inventory/Inventory/Inventopry";
- 
-export function AdminHome() {
+import { Inventory } from "../Inventory/Inventory/Inventory";
+
+export  function AdminHome() {
   const data = [
     {
       label: "ONLINE ORDERS",
       value: "online",
-      desc: <AllOrder/>,
+      desc: <AllOrder />,
     },
     {
       label: "OFFLINE ORDERS",
@@ -37,29 +37,28 @@ export function AdminHome() {
     {
       label: "INVENTORY",
       value: "inventory",
-      desc: <Inventopry/>,
+      desc: <Inventory />,
     },
-
   ];
- 
+
   return (
     <div className="my-5">
-      <Tabs value="html">
-      <TabsHeader>
-        {data.map(({ label, value }) => (
-          <Tab key={value} value={value} className=" font-sans font-bold">
-            {label}
-          </Tab>
-        ))}
-      </TabsHeader>
-      <TabsBody>
-        {data.map(({ value, desc }) => (
-          <TabPanel key={value} value={value}>
-            {desc}
-          </TabPanel>
-        ))}
-      </TabsBody>
-    </Tabs>
+      <Tabs value="online"> {/* Make sure the initial value matches one of the tab values */}
+        <TabsHeader>
+          {data.map(({ label, value }) => (
+            <Tab key={value} value={value} className="font-sans font-bold">
+              {label}
+            </Tab>
+          ))}
+        </TabsHeader>
+        <TabsBody>
+          {data.map(({ value, desc }) => (
+            <TabPanel key={value} value={value}>
+              {desc}
+            </TabPanel>
+          ))}
+        </TabsBody>
+      </Tabs>
     </div>
   );
 }

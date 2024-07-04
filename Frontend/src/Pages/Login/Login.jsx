@@ -37,24 +37,19 @@ export function Login() {
     };
 
     try {
-      const response = await axios.post('https://cy-rent-server.vercel.app/api/login', user);
+      const response = await axios.post('http://localhost:5000/api/users/login', user);
       
       if (response.data.error) {
-        toast.error(response.data.error); // Display error message
+        toast.error(response.data.error); 
       } else {
         toast.success("Login successful!");
-        localStorage.setItem('token', response.data.token); 
-        console.log("Token:", response.data.token);
-          // Store token in local storage
-        navigate('/'); // Redirect to dashboard or any protected route
+        localStorage.setItem('token', response.data.token);
+        navigate('/'); 
       }
     } catch (error) {
-      if (error.response && error.response.data && error.response.data.error) {
-        toast.error(error.response.data.error); // Display specific backend error message
-      } else {
-        console.error('Error logging in:', error);
-        toast.error("Login failed. Please try again.");
-      }
+      const errorMessage = error.response?.data?.error || "Login failed. Please try again.";
+      toast.error(errorMessage);
+      console.error('Error logging in:', error);
     }
   };
 
@@ -95,15 +90,9 @@ export function Login() {
             </Button>
             <Typography variant="small" className="mt-6 flex justify-center">
               Don't have an account?
-              <Typography
-                as="a"
-                href="#signup"
-                variant="small"
-                color="blue-gray"
-                className="ml-1 font-bold"
-              >
-                <Link to="/register">Register</Link>
-              </Typography>
+              <Link to="/register" className="ml-1 font-bold text-blue-gray">
+                Register
+              </Link>
             </Typography>
           </CardFooter>
         </form>

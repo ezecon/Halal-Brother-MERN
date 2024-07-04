@@ -1,29 +1,28 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
-
-a{
+a {
 	text-decoration: none;
-}
-.get-button{
+  }
+  .get-button {
 	background-color: transparent;
 	padding: 20px 40px;
 	border: 2px crimson solid;
-	text-align:left;
+	text-align: left;
 	font-size: larger;
-}
-.get-button:hover{
+  }
+  .get-button:hover {
 	background-color: crimson;
 	border-color: crimson;
-}
-
-#hero {
+  }
+  
+  #hero {
 	margin-top: -20px;
 	background-size: cover;
 	background-position: top center;
 	position: relative;
-}
-#hero::after {
+  }
+  #hero::after {
 	content: '';
 	position: absolute;
 	left: 0;
@@ -33,32 +32,32 @@ a{
 	background-color: black;
 	opacity: 0.7;
 	z-index: -1;
-}
-#hero .hero {
+  }
+  #hero .hero {
 	max-width: 1200px;
 	margin: 0 auto;
-	padding: 0 50px;
-}
-#hero h1 {
+	padding: 0 20px; /* Adjust padding for smaller screens */
+  }
+  #hero h1 {
 	display: block;
 	width: fit-content;
-	font-size: 4rem;
+	font-size: 2rem; /* Default font size for small screens */
 	position: relative;
 	color: transparent;
 	animation: text_reveal 0.5s ease forwards;
 	animation-delay: 1s;
-}
-#hero h1:nth-child(1) {
+  }
+  #hero h1:nth-child(1) {
 	animation-delay: 1s;
-}
-#hero h1:nth-child(2) {
+  }
+  #hero h1:nth-child(2) {
 	animation-delay: 2s;
-}
-#hero h1:nth-child(3) {
+  }
+  #hero h1:nth-child(3) {
 	animation: text_reveal_name 0.5s ease forwards;
 	animation-delay: 3s;
-}
-#hero h1 span {
+  }
+  #hero h1 span {
 	position: absolute;
 	top: 0;
 	left: 0;
@@ -67,50 +66,48 @@ a{
 	background-color: crimson;
 	animation: text_reveal_box 1s ease;
 	animation-delay: 0.5s;
-}
-#hero h1:nth-child(1) span {
+  }
+  #hero h1:nth-child(1) span {
 	animation-delay: 0.5s;
-}
-#hero h1:nth-child(2) span {
+  }
+  #hero h1:nth-child(2) span {
 	animation-delay: 1.5s;
-}
-#hero h1:nth-child(3) span {
+  }
+  #hero h1:nth-child(3) span {
 	animation-delay: 2.5s;
-}
-
-/* End Hero Section */
-
-
-/* Keyframes */
-@keyframes hamburger_puls {
+  }
+  
+  /* Keyframes */
+  @keyframes hamburger_puls {
 	0% {
-		opacity: 1;
-		transform: scale(1);
+	  opacity: 1;
+	  transform: scale(1);
 	}
 	100% {
-		opacity: 0;
-		transform: scale(1.4);
+	  opacity: 0;
+	  transform: scale(1.4);
 	}
-}
-@keyframes text_reveal_box {
+  }
+  @keyframes text_reveal_box {
 	50% {
-		width: 100%;
-		left: 0;
+	  width: 100%;
+	  left: 0;
 	}
 	100% {
-		width: 0;
-		left: 100%;
+	  width: 0;
+	  left: 100%;
 	}
-}
-@keyframes text_reveal {
+  }
+  @keyframes text_reveal {
 	100% {
-		color: white;
+	  color: white;
 	}
-}
-@keyframes text_reveal_name {
+  }
+  @keyframes text_reveal_name {
 	100% {
-		color: crimson;
-		font-weight: 500;
+	  color: crimson;
+	  font-weight: 500;
 	}
-}
-/* End Keyframes */
+  }
+  /* End Keyframes */
+  

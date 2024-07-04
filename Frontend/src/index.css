@@ -44,12 +44,12 @@ a {
   #hero .hero {
 	max-width: 1200px;
 	margin: 0 auto;
-	padding: 0 20px; /* Adjust padding for smaller screens */
+	padding: 0 10px; /* Adjust padding for smaller screens */
   }
   #hero h1 {
 	display: block;
 	width: fit-content;
-	font-size: 3rem; /* Default font size for small screens */
+	font-size: 4rem; /* Default font size for small screens */
 	position: relative;
 	color: transparent;
 	animation: text_reveal 0.5s ease forwards;

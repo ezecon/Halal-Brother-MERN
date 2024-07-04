@@ -16,7 +16,7 @@ export default function Blob() {
                     <CiClock2 className="mx-auto text-5xl" />
                 </div>
                 <p className="text-lg font-semibold my-2">Opening Hours</p>
-                <p className="text-sm">Mon-Fri: 9.00 AM to 9.00 PM</p>
+                <p className="text-sm">Mon-Fri: 9.00 AM to 7.00 PM</p>
             </div>
             <div className="p-6 md:p-12 border shadow-sm mt-14 text-center rounded-lg">
                 <div>

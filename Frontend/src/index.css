@@ -4,6 +4,9 @@
 a {
 	text-decoration: none;
   }
+  .crimson{
+	color: crimson;
+  }
   .get-button {
 	background-color: transparent;
 	padding: 20px 40px;

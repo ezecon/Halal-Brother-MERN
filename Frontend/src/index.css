@@ -52,7 +52,7 @@ a {
   #hero h1 {
 	display: block;
 	width: fit-content;
-	font-size: 4rem; /* Default font size for small screens */
+	font-size: auto; /* Default font size for small screens */
 	position: relative;
 	color: transparent;
 	animation: text_reveal 0.5s ease forwards;

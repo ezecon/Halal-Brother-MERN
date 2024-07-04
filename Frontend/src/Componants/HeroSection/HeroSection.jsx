@@ -1,7 +1,7 @@
 export default function HeroSection() {
   return (
     <div>
-      <section id="hero" className="p-10 md:p-20">
+      <section id="hero" className="min-h-[80vh] p-20 md:p-20 flex items-center">
         <div className="hero container mx-auto">
           <div className="text-left">
             <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl">Hello, <span></span></h1>

@@ -15,6 +15,14 @@ a {
 	background-color: crimson;
 	border-color: crimson;
   }
+  .check-button {
+	background-color: transparent;
+	border: 2px crimson solid;
+  }
+  .get-button:hover {
+	background-color: crimson;
+	border-color: crimson;
+  }
   
   #hero {
 	margin-top: -20px;
@@ -41,7 +49,7 @@ a {
   #hero h1 {
 	display: block;
 	width: fit-content;
-	font-size: 2rem; /* Default font size for small screens */
+	font-size: 3rem; /* Default font size for small screens */
 	position: relative;
 	color: transparent;
 	animation: text_reveal 0.5s ease forwards;

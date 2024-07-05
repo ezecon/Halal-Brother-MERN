@@ -10,18 +10,19 @@ export default function ItemCard({ data }) {
   const { _id, name, price, image } = data;
   const { token, removeToken } = useToken();
   const navigate = useNavigate();
-  const [userID, setUserID] = useState(null);
+  const [ID, setID] = useState(null);
 
   useEffect(() => {
     const verifyToken = async () => {
       try {
         const response = await axios.post(
-          "https://cy-rent-server.vercel.app/api/verifyToken",
+          "https://halal-brother-server.vercel.app/api/verifyToken",
           { token }
         );
 
         if (response.status === 200 && response.data.valid) {
-          setUserID(response.data.decoded.ID);
+          setID(response.data.decoded.ID);
+          console.log(response.data.decoded.ID)
         } else {
           console.log("Token verification failed:", response.data);
           removeToken();
@@ -46,7 +47,7 @@ export default function ItemCard({ data }) {
       const response = await axios.post(
         "https://halal-brother-server.vercel.app/api/carts",
         {
-          userID:userID,
+          userID: ID,
           itemID: _id,
         }
       );

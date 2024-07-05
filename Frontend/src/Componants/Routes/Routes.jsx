@@ -7,6 +7,7 @@ import Products from "../../Pages/Products/Products";
 import { AdminHome } from "../../Pages/Admin/Home/AdminHome";
 import Profile from "../../Pages/Customer/Profile/Profile";
 import ProfileUpdate from "../../Pages/Customer/Profile/ProfileUpdate";
+import Cart from "../../Pages/Cart.jsx/Cart";
 
 
 const router = createBrowserRouter([
@@ -21,6 +22,10 @@ const router = createBrowserRouter([
             {
                 path: '/products',
                 element: <Products />
+            },
+            {
+                path: '/cart',
+                element: <Cart/>
             },
             {
                 path: '/profile',

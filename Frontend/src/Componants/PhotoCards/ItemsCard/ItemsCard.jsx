@@ -19,10 +19,10 @@ export default function ItemCard({data}) {
         <div className="p-2">
         <p className="text-lg font-semibold text-gray-800 truncate">{name}</p>
         <p className="text-2xl font-bold crimson">৳{price}</p>
-
-
-            <>Add to Cart</>
-        </div>
+         <div className="my-2">
+         <a href="" type="submit" className="bg-black text-white px-4 py-2 rounded">Add to Cart</a>
+         </div>
+         </div>
     </div>
   )
 }

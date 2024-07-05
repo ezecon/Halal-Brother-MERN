@@ -1,44 +1,79 @@
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import ItemCard from "../../Componants/PhotoCards/ItemsCard/ItemsCard";
+import { Button, Option, Select } from "@material-tailwind/react";
 
 export default function Products() {
   const [products, setProducts] = useState([]);
+  const [filteredProducts, setFilteredProducts] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [selectedCategory, setSelectedCategory] = useState("");
 
   useEffect(() => {
     fetch("https://halal-brother-server.vercel.app/api/items")
       .then((res) => res.json())
-      .then((data) => setProducts(data));
-
-    setLoading(false);
+      .then((data) => {
+        setProducts(data);
+        setFilteredProducts(data);
+        setLoading(false);
+      });
   }, []);
 
-  const renderProduct =
-          [...products]
-          .reverse()
-          .map((item) => <ItemCard key={item._id} data={item} />);
+  const filterProducts = (category) => {
+    if (category === "") {
+      setFilteredProducts(products);
+    } else {
+      setFilteredProducts(products.filter((product) => product.version === category));
+    }
+  };
 
+  const handleCategoryChange = (category) => {
+    setSelectedCategory(category);
+    filterProducts(category);
+  };
 
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-  } = useForm();
+  const { register, handleSubmit, formState: { errors } } = useForm();
 
   const onSubmit = (data) => {
     console.log(data);
-    // Handle form submission
+    // Handle form submission if needed
   };
+
+  if (loading) {
+    return <div>Loading...</div>;
+  }
+
   return (
     <div>
-        <div className="w-full  bg-black text-center py-56">
+      <div className="w-full bg-black text-center py-56">
         <h1 className="crimson text-4xl">PRODUCTS</h1>
-        <p  className="text-white">Order Now</p>
+        <p className="text-white">Order Now</p>
+      </div>
+      <form className="p-4 space-y-4" onSubmit={handleSubmit(onSubmit)}>
+        <div className="flex gap-6">
+          <div className="w-full">
+            <Select
+              required
+              label="Select Category"
+              value={selectedCategory}
+              onChange={(e) => handleCategoryChange(e)}
+            >
+              <Option value="">All</Option>
+              <Option value="Burger">Burger</Option>
+              <Option value="Chicken Special">Chicken Special</Option>
+              <Option value="Newly Added">Newly Added</Option>
+              <Option value="Lunch">Lunch</Option>
+              <Option value="Halal Bro Special">Halal Bro Special</Option>
+              <Option value="Drinks">Drinks</Option>
+            </Select>
+          </div>
         </div>
-        <div className="bg-white rounded-lg grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 p-4">
-          {renderProduct}
-        </div>
+      </form>
+      <div className="bg-white rounded-lg grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 p-4">
+        {filteredProducts.reverse().map((item) => (
+          <ItemCard key={item._id} data={item} />
+        ))}
+      </div>
     </div>
-  )
+  );
 }

@@ -2,12 +2,45 @@ import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import ItemCard from "../../Componants/PhotoCards/ItemsCard/ItemsCard";
 import { Button, Option, Select } from "@material-tailwind/react";
+import { useNavigate } from "react-router-dom";
+import { useToken } from '../../Componants/Hook/useToken';
+import axios from 'axios';
 
 export default function Products() {
   const [products, setProducts] = useState([]);
   const [filteredProducts, setFilteredProducts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [selectedCategory, setSelectedCategory] = useState("");
+
+
+  ///////////////////////////////
+  const { token, removeToken } = useToken();
+  const navigate = useNavigate();
+  const [userID, setUserID] = useState(null);
+
+  useEffect(() => {
+    const verifyToken = async () => {
+      try {
+        const response = await axios.post('https://cy-rent-server.vercel.app/api/verifyToken', { token });
+
+        if (response.status === 200 && response.data.valid) {
+          setUserID(response.data.decoded.ID);
+
+        } else {
+          console.log("Token verification failed:", response.data);
+          removeToken();
+        }
+      } catch (error) {
+        console.error('Error verifying token:', error);
+        removeToken();
+      }
+    };
+
+    verifyToken();
+  }, [token, navigate, removeToken]);
+
+
+
 
   useEffect(() => {
     fetch("https://halal-brother-server.vercel.app/api/items")

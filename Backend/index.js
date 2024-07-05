@@ -36,6 +36,9 @@ app.use('/api/verifyToken', verify);
 const items = require('./routes/item.js')
 app.use('/api/items',items);
 
+const cart = require('./routes/cart.js')
+app.use('/api/carts', cart);
+
 
 
 //start server

@@ -24,7 +24,7 @@ export function Items() {
   ];
  
   const [active, setActive] = React.useState(
-    "https://static.toiimg.com/thumb/imgsize-23456,msid-68229674,width-600,resizemode-4/68229674.jpg",
+    "https://assets.bonappetit.com/photos/61f431cd3c17d5f529cd9042/16:9/w_2496,h_1404,c_limit/20220118%20Lunar%20New%20Year%20Spread%20LEDE.jpg",
   );
  
   return (

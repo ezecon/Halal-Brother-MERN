@@ -33,6 +33,9 @@ app.use('/api', auth);
 const verify = require('./Auth/verifytoken.js');
 app.use('/api/verifyToken', verify);
 
+const items = require('./routes/item.js')
+app.use('/api/items',items);
+
 
 
 //start server

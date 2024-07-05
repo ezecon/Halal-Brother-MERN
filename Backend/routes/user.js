@@ -5,22 +5,25 @@ const router = express.Router();
 const User = require('../models/users');
 
 // Secret key for JWT
-const JWT_SECRET = 'MeghEcon';
+const JWT_SECRET = 'meghecon';
 
 // Create a user
 router.post('/register', async (req, res) => {
     const { name, email, password, address, number, image } = req.body;
 
+    // Basic validation
     if (!name || !email || !password) {
         return res.status(400).json({ error: 'All fields are required' });
     }
 
     try {
+        // Check for existing user with the same email
         const existingUser = await User.findOne({ email });
         if (existingUser) {
             return res.status(400).json({ error: 'Email already in use' });
         }
 
+        // Hash the password
         const hashedPassword = await bcrypt.hash(password, 10);
 
         const user = new User({
@@ -33,14 +36,12 @@ router.post('/register', async (req, res) => {
         });
 
         const newUser = await user.save();
-
-        const token = jwt.sign({ id: newUser._id, email: newUser.email }, JWT_SECRET, { expiresIn: '1h' });
-
-        res.status(201).json({ user: newUser, token });
+        res.status(201).json(newUser);
     } catch (err) {
         res.status(500).json({ message: err.message });
     }
 });
+
 
 
 // Get all users

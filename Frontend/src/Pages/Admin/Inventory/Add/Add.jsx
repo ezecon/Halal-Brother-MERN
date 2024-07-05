@@ -7,6 +7,7 @@ export default function Add() {
   const [name, setName] = useState('');
   const [description, setDescription] = useState('');
   const [price, setPrice] = useState('');
+  const [type, setType] = useState('');
   const [version, setVersion] = useState('');
   const [image, setImage] = useState('');
 
@@ -17,17 +18,19 @@ export default function Add() {
       name,
       description,
       price,
+      type,
       version,
       image
     };
 
     try {
-      await axios.post('YOUR_API_ENDPOINT', postData);
+      await axios.post('http://localhost:5000/api/items', postData);
       toast.success('Post created successfully!');
       // Reset form
       setName('');
       setDescription('');
       setPrice('');
+      setType('');
       setVersion('');
       setImage('');
     } catch (error) {
@@ -74,13 +77,28 @@ export default function Add() {
           <div className="w-full">
             <Select
               required
-              label="Select Version"
+              label="Select Type"
+              value={type}
+              onChange={(e) => setType(e)}
+            >
+              <Option value="Unavailable">Unavailable</Option>
+              <Option value="Available">Available</Option>
+            </Select>
+          </div>
+
+          <div className="w-full">
+            <Select
+              required
+              label="Select Category"
               value={version}
               onChange={(e) => setVersion(e)}
             >
-              <Option value="Unavailable">Unavailable</Option>
-              <Option value="On Rent">On Rent</Option>
-              <Option value="Available">Available</Option>
+              <Option value="Burger">Burger</Option>
+              <Option value="Chicken Special">Chicken Special</Option>
+              <Option value="Newly Added">Newly Added</Option>
+              <Option value="Lunch">Lunch</Option>
+              <Option value="Halal Bro Special">Halal Bro Special</Option>
+              <Option value="Drinks">Drinks</Option>
             </Select>
           </div>
 

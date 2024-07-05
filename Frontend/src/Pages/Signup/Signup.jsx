@@ -27,7 +27,7 @@ export default function Signup() {
       name: data.name,
       email: data.email,
       password: data.password,
-    };
+    }; 
 
     try {
       const response = await axios.post('https://halal-brother-server.vercel.app/api/users/register', newUser);

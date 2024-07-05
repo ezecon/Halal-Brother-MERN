@@ -28,7 +28,8 @@ export function NavMenu() {
         const response = await axios.post('https://halal-brother-server.vercel.app/api/verifyToken', { token });
 
         if (response.status === 200 && response.data.valid) {
-          setUserID(response.data.decoded.ID);
+          setUserID(response.data.decoded.id);
+          console.log(response.data.decoded.id)
 
         } else {
           console.log("Token verification failed:", response.data);

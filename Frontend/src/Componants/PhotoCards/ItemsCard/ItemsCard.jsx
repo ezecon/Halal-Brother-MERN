@@ -21,8 +21,8 @@ export default function ItemCard({ data }) {
         );
 
         if (response.status === 200 && response.data.valid) {
-          setID(response.data.decoded.ID);
-          console.log(response.data.decoded.ID)
+          setID(response.data.decoded.id);
+          console.log(response.data.decoded.id)
         } else {
           console.log("Token verification failed:", response.data);
           removeToken();

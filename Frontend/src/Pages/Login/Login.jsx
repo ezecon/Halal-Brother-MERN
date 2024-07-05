@@ -33,7 +33,7 @@ export function Login() {
   const handleLoginForm = async (data) => {
     const user = {
       email: data.email,
-      password: data.password,
+      password: data.password, 
     };
 
     try {

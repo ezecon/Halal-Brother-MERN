@@ -28,7 +28,7 @@ const users = require('./routes/user.js')
 app.use('/api/users',users);
 
 const auth = require('./Auth/auth.js');
-app.use('/api', auth);
+app.use('/api/login', auth);
 
 const verify = require('./Auth/verifytoken.js');
 app.use('/api/verifyToken', verify);

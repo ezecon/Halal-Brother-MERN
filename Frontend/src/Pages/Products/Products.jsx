@@ -7,7 +7,7 @@ export default function Products() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    fetch("https://cy-rent-server.vercel.app/api/items")
+    fetch("https://halal-brother-server.vercel.app/api/items")
       .then((res) => res.json())
       .then((data) => setProducts(data));
 

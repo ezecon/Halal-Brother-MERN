@@ -30,7 +30,7 @@ export default function Signup() {
     };
 
     try {
-      const response = await axios.post('http://localhost:5000/api/users/register', newUser);
+      const response = await axios.post('https://halal-brother-server.vercel.app/api/users/register', newUser);
       
       if (response.data.error) {
         toast.error(response.data.error);

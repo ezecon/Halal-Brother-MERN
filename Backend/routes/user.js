@@ -42,6 +42,34 @@ router.post('/register', async (req, res) => {
     }
 });
 
+// Login user
+router.post('/login', async (req, res) => {
+    const { email, password } = req.body;
+
+    if (!email || !password) {
+        return res.status(400).json({ error: 'All fields are required' });
+    }
+
+    try {
+        const user = await User.findOne({ email });
+        if (!user) {
+            return res.status(400).json({ error: 'Invalid email or password' });
+        }
+
+        const isPasswordValid = await bcrypt.compare(password, user.password);
+        if (!isPasswordValid) {
+            return res.status(400).json({ error: 'Invalid email or password' });
+        }
+
+        const token = jwt.sign({ id: user._id, email: user.email }, JWT_SECRET, {
+            expiresIn: '1h',
+        });
+
+        res.json({ token });
+    } catch (err) {
+        res.status(500).json({ message: err.message });
+    }
+});
 
 // Get all users
 router.get('/', async (req, res) => {

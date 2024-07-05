@@ -1,10 +1,43 @@
+import { useNavigate } from "react-router-dom";
 import Blob from "../../Componants/Blob/Blob";
 import Footer from "../../Componants/Footer/Footer";
 import HeroSection from "../../Componants/HeroSection/HeroSection";
+import { useToken } from "../../Componants/Hook/useToken";
 import Offer from "../../Componants/Offer/Offer";
 import TopItem from "../../Componants/TopItems/TopItem";
+import { useEffect, useState } from "react";
+import axios from "axios";
 
 export default function Home() {
+  const { token, removeToken } = useToken();
+  const navigate = useNavigate();
+  const [userID, setUserID] = useState(null);
+
+  useEffect(() => {
+    const verifyToken = async () => {
+      try {
+        if (!token) {
+
+          return;
+        }
+
+        const response = await axios.post('http://localhost:5000/api/verifyToken', { token });
+
+        if (response.status === 200 && response.data.valid) {
+          setUserID(response.data.decoded.ID);
+
+        } else {
+          console.log("Token verification failed:", response.data);
+          removeToken();
+        }
+      } catch (error) {
+        console.error('Error verifying token:', error);
+        removeToken();
+      }
+    };
+
+    verifyToken();
+  }, [token, navigate, removeToken]);
   return (
     <div>
       <HeroSection/>

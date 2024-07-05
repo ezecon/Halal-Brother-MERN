@@ -5,6 +5,8 @@ import Signup from "../../Pages/Signup/Signup";
 import { Login } from "../../Pages/Login/Login";
 import Products from "../../Pages/Products/Products";
 import { AdminHome } from "../../Pages/Admin/Home/AdminHome";
+import Profile from "../../Pages/Customer/Profile/Profile";
+import ProfileUpdate from "../../Pages/Customer/Profile/ProfileUpdate";
 
 
 const router = createBrowserRouter([
@@ -19,6 +21,14 @@ const router = createBrowserRouter([
             {
                 path: '/products',
                 element: <Products />
+            },
+            {
+                path: '/profile',
+                element: <Profile />
+            },
+            {
+                path: '/profile-update',
+                element: <ProfileUpdate />
             },
             {
                 path: '/admin',

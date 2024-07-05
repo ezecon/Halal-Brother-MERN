@@ -9,13 +9,19 @@ a {
   }
   .get-button {
 	background-color: transparent;
-	padding: 20px 40px;
+	padding: 1rem;
 	border: 2px crimson solid;
 	text-align: left;
 	font-size: larger;
   }
   .get-button:hover {
 	background-color: crimson;
+	border-color: crimson;
+  }
+  .bg-crimson{
+	background-color: crimson;
+  }
+  .border-crimson{
 	border-color: crimson;
   }
   .check-button {

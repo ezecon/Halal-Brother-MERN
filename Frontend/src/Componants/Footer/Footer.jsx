@@ -10,7 +10,7 @@ export default function Footer() {
       </div>
       <h2 className="text-center text-white py-2">Your Home</h2>
       <div className=" text-center">
-        <div className="">
+        <div className="flex justify-center items-center ">
           <a href="https://www.facebook.com/econozzaman.econ"><img src="https://img.icons8.com/bubbles/100/000000/facebook-new.png" /></a>
         </div>
       </div>

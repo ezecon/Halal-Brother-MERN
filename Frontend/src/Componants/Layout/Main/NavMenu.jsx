@@ -1,31 +1,55 @@
-import React from "react";
+import { useEffect, useState } from "react";
 import {
   Navbar,
   MobileNav,
   Typography,
   Button,
   IconButton,
+  Avatar,
+  Menu,
+  MenuHandler,
+  MenuList,
+  MenuItem,
 } from "@material-tailwind/react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { useToken } from "../../Hook/useToken";
+import axios from "axios";
 
 export function NavMenu() {
-  const [openNav, setOpenNav] = React.useState(false);
-  const [darkMode, setDarkMode] = React.useState(true); // Default to dark mode
+  const { token, removeToken } = useToken();
+  const navigate = useNavigate();
+  const [userID, setUserID] = useState(null);
 
-  React.useEffect(() => {
+  useEffect(() => {
+    const verifyToken = async () => {
+      try {
+        const response = await axios.post('http://localhost:5000/api/verifyToken', { token });
+
+        if (response.status === 200 && response.data.valid) {
+          setUserID(response.data.decoded.ID);
+
+        } else {
+          console.log("Token verification failed:", response.data);
+          removeToken();
+        }
+      } catch (error) {
+        console.error('Error verifying token:', error);
+        removeToken();
+      }
+    };
+
+    verifyToken();
+  }, [token, navigate, removeToken]);
+
+
+  const [openNav, setOpenNav] = useState(false);
+
+  useEffect(() => {
     window.addEventListener(
       "resize",
       () => window.innerWidth >= 960 && setOpenNav(false),
     );
   }, []);
-
-  React.useEffect(() => {
-    if (darkMode) {
-      document.documentElement.classList.add('dark');
-    } else {
-      document.documentElement.classList.remove('dark');
-    }
-  }, [darkMode]);
 
   const navList = (
     <ul className="mt-2 mb-4 flex flex-col gap-2 lg:mb-0 lg:mt-0 lg:flex-row lg:items-center lg:gap-6">
@@ -66,16 +90,37 @@ export function NavMenu() {
         </Typography>
         <div className="hidden lg:block">{navList}</div>
         <div className="flex items-center gap-x-1">
-          <Link to="/login">
-            <Button variant="text" size="sm" className="hidden lg:inline-block text-white">
-              <span>Log In</span>
-            </Button>
-          </Link>
-          <Link to="/register">
-            <Button variant="gradient" size="sm" className="hidden lg:inline-block check-button">
-              <span>Sign in</span>
-            </Button>
-          </Link>
+          {token ? (
+            
+            <Menu>
+                  <MenuHandler>
+                  <Avatar
+                          src="https://docs.material-tailwind.com/img/face-2.jpg"
+                          alt="avatar"
+                          withBorder={true}
+                          className="p-0.5 border-red-50"
+                        />
+                  </MenuHandler>
+                  <MenuList>
+                    <Link to="/profile"><MenuItem>Profile</MenuItem></Link>
+                    <MenuItem>Dashboard</MenuItem>
+                    <MenuItem>Logout</MenuItem>
+                  </MenuList>
+           </Menu>
+          ) : (
+            <>
+              <Link to="/login">
+                <Button variant="text" size="sm" className="hidden lg:inline-block text-white">
+                  <span>Log In</span>
+                </Button>
+              </Link>
+              <Link to="/register">
+                <Button variant="gradient" size="sm" className="hidden lg:inline-block check-button">
+                  <span>Sign In</span>
+                </Button>
+              </Link>
+            </>
+          )}
         </div>
         <IconButton
           variant="text"

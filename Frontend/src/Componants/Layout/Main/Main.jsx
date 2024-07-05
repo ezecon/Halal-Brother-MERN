@@ -8,7 +8,7 @@ export default function Main() {
 
   return (
     <div> 
-      <div className="flex-none   fixed left-0 right-0 top-0  overflow-y-auto">
+      <div className="flex-none  z-10 fixed left-0 right-0 top-0  overflow-y-auto">
       <NavMenu/>
       </div>
       <div className="mx-auto max-w-screen-xl mt-8 py-8">

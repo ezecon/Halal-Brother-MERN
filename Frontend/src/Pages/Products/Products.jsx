@@ -21,7 +21,7 @@ export default function Products() {
   useEffect(() => {
     const verifyToken = async () => {
       try {
-        const response = await axios.post('https://halal-brother-server.vercel.app/api/verifyToken', { token });
+        const response = await axios.post('http://localhost:5000/api/verifyToken', { token });
 
         if (response.status === 200 && response.data.valid) {
           setUserID(response.data.decoded.ID);
@@ -43,7 +43,7 @@ export default function Products() {
 
 
   useEffect(() => {
-    fetch("https://halal-brother-server.vercel.app/api/items")
+    fetch("http://localhost:5000/api/items")
       .then((res) => res.json())
       .then((data) => {
         setProducts(data);

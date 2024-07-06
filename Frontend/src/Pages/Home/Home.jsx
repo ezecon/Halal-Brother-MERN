@@ -1,12 +1,12 @@
 import { useNavigate } from "react-router-dom";
 import Blob from "../../Componants/Blob/Blob";
 import Footer from "../../Componants/Footer/Footer";
-import HeroSection from "../../Componants/HeroSection/HeroSection";
 import { useToken } from "../../Componants/Hook/useToken";
 import Offer from "../../Componants/Offer/Offer";
 import TopItem from "../../Componants/TopItems/TopItem";
 import { useEffect, useState } from "react";
 import axios from "axios";
+import { HeroSection } from "../../Componants/HeroSection/HeroSection";
 
 export default function Home() {
   const { token, removeToken } = useToken();
@@ -21,7 +21,7 @@ export default function Home() {
           return;
         }
 
-        const response = await axios.post('https://halal-brother-server.vercel.app/api/verifyToken', { token });
+        const response = await axios.post('http://localhost:5000/api/verifyToken', { token });
 
         if (response.status === 200 && response.data.valid) {
           setUserID(response.data.decoded.id);

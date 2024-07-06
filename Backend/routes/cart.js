@@ -27,4 +27,21 @@ router.get('/:userID', async (req, res) => {
     }
 });
 
+// Delete one item from cart by itemID and userID
+router.delete('/', async (req, res) => {
+    const { itemID, userID } = req.body;
+
+    try {
+        const deletedCartItem = await Cart.findOneAndDelete({ itemID, userID, status: 'In' });
+        
+        if (deletedCartItem) {
+            res.status(200).json({ message: 'Item deleted', item: deletedCartItem });
+        } else {
+            res.status(404).json({ message: 'Item not found' });
+        }
+    } catch (error) {
+        res.status(500).json({ message: 'Server error', error });
+    }
+});
+
 module.exports = router;

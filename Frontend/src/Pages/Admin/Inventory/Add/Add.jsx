@@ -24,7 +24,7 @@ export default function Add() {
     };
 
     try {
-      await axios.post('https://halal-brother-server.vercel.app/api/items', postData);
+      await axios.post('http://localhost:5000/api/items', postData);
       toast.success('Post created successfully!');
       // Reset form
       setName('');

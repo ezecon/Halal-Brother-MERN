@@ -3,6 +3,7 @@ import { useToken } from "../../Componants/Hook/useToken";
 import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import axios from "axios";
+import { RiDeleteBin6Fill } from "react-icons/ri";
 
 export default function Cart() {
   const { token, removeToken } = useToken();
@@ -22,7 +23,7 @@ export default function Cart() {
           return;
         }
 
-        const response = await axios.post('https://halal-brother-server.vercel.app/api/verifyToken', { token });
+        const response = await axios.post('http://localhost:5000/api/verifyToken', { token });
 
         if (response.status === 200 && response.data.valid) {
           setUserID(response.data.decoded.id);
@@ -45,7 +46,7 @@ export default function Cart() {
   useEffect(() => {
     const fetchCartData = async () => {
       try {
-        const response = await axios.get(`https://halal-brother-server.vercel.app/api/carts/${userID}`);
+        const response = await axios.get(`http://localhost:5000/api/carts/${userID}`);
         const data = response.data;
         const filteredData = data.filter(item => item.status === "IN");
         setCartData(filteredData);
@@ -65,8 +66,8 @@ export default function Cart() {
     const fetchItemData = async () => {
       try {
         const promises = cartData.map(async (item) => {
-          const response = await axios.get(`https://halal-brother-server.vercel.app/api/items/${item.itemID}`);
-          console.log("item id:", item.itemID)
+          const response = await axios.get(`http://localhost:5000/api/items/${item.itemID}`);
+          console.log("item id:", item.itemID);
           return response.data;
         });
 
@@ -84,6 +85,24 @@ export default function Cart() {
     }
   }, [cartData]);
 
+  const handleDelete = async (itemID) => {
+    try {
+      await axios.delete(`http://localhost:5000/api/carts/`, {
+        data: { itemID, userID }
+      });
+
+      // Filter out the deleted item from the detailedCartData
+      const updatedCartData = detailedCartData.filter((item) => item.id !== itemID);
+      setDetailedCartData(updatedCartData);
+
+      // Update the total price
+      const totalPrice = updatedCartData.reduce((acc, item) => acc + item.price, 0);
+      setTotal(totalPrice);
+    } catch (err) {
+      setError(err.message);
+    }
+  };
+
   if (loading) {
     return <p>Loading...</p>;
   }
@@ -93,30 +112,37 @@ export default function Cart() {
   }
 
   return (
-    <div className="mt-10">
-      <h1 className="text-center font-bold text-3xl ga-maamli-regular">
+    <div className="mt-10 p-6">
+      <h1 className="text-center font-bold text-3xl ga-maamli-regular mb-6">
         CART
       </h1>
-      <div>
-        <div>
-          <h1 className="text-center font-bold text-xl ga-maamli-regular">
-            Items:
-          </h1>
-          <div>
-            {detailedCartData.map(item => (
-              <div key={item.id}>
-                <p>Item Name: {item.name}</p>
-                <p>Price: ${item.price}</p>
-                <p>Description: {item.description}</p>
-                <p>Category: {item.version}</p>
-              </div>
-            ))}
-          </div>
+      <div className="border border-gray-300 rounded-lg p-4">
+        <h1 className="text-center font-bold text-xl ga-maamli-regular mb-4">
+          Items:
+        </h1>
+        <div className="space-y-4">
+          {detailedCartData.map((item) => (
+            <div
+              key={item.id}
+              className="border border-gray-200 rounded-lg p-4 bg-white shadow-sm flex flex-col md:flex-row md:items-center justify-between space-y-2 md:space-y-0"
+            >
+              <img className="w-10" src={item.image} alt="" />
+              <p className="font-semibold">Item Name: {item.name}</p>
+              <p>Price: ${item.price}</p>
+              <p>Category: {item.version}</p>
+              <RiDeleteBin6Fill
+                onClick={() => handleDelete(item.id)}
+                className="text-red-900 text-2xl cursor-pointer"
+              />
+            </div>
+          ))}
         </div>
-        <div>
-          <p>Total: ${total}</p>
-          <Button>Buy</Button>
-        </div>
+      </div>
+      <div className="border-t border-gray-300 mt-6 pt-4 flex justify-between items-center">
+        <p className="font-semibold">Total: ${total}</p>
+        <Button className="bg-blue-500 text-white py-2 px-4 rounded-lg">
+          Buy
+        </Button>
       </div>
     </div>
   );

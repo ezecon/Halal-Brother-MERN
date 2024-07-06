@@ -16,7 +16,7 @@ export default function ItemCard({ data }) {
     const verifyToken = async () => {
       try {
         const response = await axios.post(
-          "https://halal-brother-server.vercel.app/api/verifyToken",
+          "http://localhost:5000/api/verifyToken",
           { token }
         );
 
@@ -45,7 +45,7 @@ export default function ItemCard({ data }) {
    if(token){
     try {
       const response = await axios.post(
-        "https://halal-brother-server.vercel.app/api/carts",
+        "http://localhost:5000/api/carts",
         {
           userID: ID,
           itemID: _id,

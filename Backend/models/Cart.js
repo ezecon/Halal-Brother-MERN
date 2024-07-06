@@ -5,13 +5,27 @@ const cartSchema = new mongoose.Schema({
         type: String,
         require: true,
     },
+    image:{
+        type: String,
+        require: true
+    },
+   
+    name:{
+        type: String,
+        require: true
+    },
+   
+    price:{
+        type: Number,
+        require: true
+    },
     userID:{
         type: String,
         require: true,
     },
-    status:{
-        type: String,
-        default:'IN'
+    date:{
+        type: Date,
+        default: Date.now,
     }
 });
 

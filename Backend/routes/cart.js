@@ -4,10 +4,10 @@ const Cart = require('../models/Cart');
 
 // Add item to cart
 router.post('/', async (req, res) => {
-    const { itemID, userID } = req.body;
+    const { itemID, userID, image, name, price } = req.body;
 
     try {
-        const newCartItem = new Cart({ itemID, userID });
+        const newCartItem = new Cart({ itemID, userID, image, name, price });
         await newCartItem.save();
         res.status(201).json(newCartItem);
     } catch (error) {
@@ -27,18 +27,34 @@ router.get('/:userID', async (req, res) => {
     }
 });
 
-// Delete one item from cart by itemID and userID
-router.delete('/', async (req, res) => {
-    const { itemID, userID } = req.body;
+// Delete one item from cart
+router.delete('/:itemId', async (req, res) => {
+    const { itemId } = req.params;
 
     try {
-        const deletedCartItem = await Cart.findOneAndDelete({ itemID, userID, status: 'In' });
-        
-        if (deletedCartItem) {
-            res.status(200).json({ message: 'Item deleted', item: deletedCartItem });
-        } else {
-            res.status(404).json({ message: 'Item not found' });
+        const deletedItem = await Cart.findOneAndDelete({ _id: itemId });
+
+        if (!deletedItem) {
+            return res.status(404).json({ message: 'Item not found in cart' });
         }
+
+        res.status(200).json({ message: 'Item deleted successfully', deletedItem });
+    } catch (error) {
+        res.status(500).json({ message: 'Server error', error });
+    }
+});
+// Delete one item from cart by userID
+router.delete('/delete/:userId', async (req, res) => {
+    const { userId } = req.params;
+
+    try {
+        const deletedItem = await Cart.deleteMany({ userID: userId });
+
+        if (!deletedItem) {
+            return res.status(404).json({ message: 'Item not found in cart' });
+        }
+
+        res.status(200).json({ message: 'Item deleted successfully', deletedItem });
     } catch (error) {
         res.status(500).json({ message: 'Server error', error });
     }

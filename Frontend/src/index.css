@@ -2,6 +2,19 @@
 @tailwind components;
 @tailwind utilities;
 
+/* src/styles.css or a similar CSS file */
+.playwrite-gb-s-regular {
+	font-family: "Playwrite GB S", cursive;
+	font-weight: 400;
+  }
+  
+  .playwrite-gb-s-light {
+	font-family: "Playwrite GB S", cursive;
+	font-weight: 100;
+  }
+  
+  /* Add more classes as needed */
+  
 .ga-maamli-regular {
 	font-family: "Ga Maamli", sans-serif;
 	font-weight: 400;

@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { RiDeleteBin6Fill } from "react-icons/ri";
+import toast from "react-hot-toast";
 
 export default function Cart() {
   const { token, removeToken } = useToken();
@@ -12,8 +13,7 @@ export default function Cart() {
   const [cartData, setCartData] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [total, setTotal] = useState(0);
-  const [detailedCartData, setDetailedCartData] = useState([]);
+  let total = 0; // Use let instead of var for better scoping
 
   useEffect(() => {
     const verifyToken = async () => {
@@ -27,7 +27,6 @@ export default function Cart() {
 
         if (response.status === 200 && response.data.valid) {
           setUserID(response.data.decoded.id);
-          console.log(response.data.decoded.id);
         } else {
           console.log("Token verification failed:", response.data);
           removeToken();
@@ -47,13 +46,11 @@ export default function Cart() {
     const fetchCartData = async () => {
       try {
         const response = await axios.get(`http://localhost:5000/api/carts/${userID}`);
-        const data = response.data;
-        const filteredData = data.filter(item => item.status === "IN");
-        setCartData(filteredData);
+        setCartData(response.data);
+        setLoading(false); // Set loading to false after data is fetched
       } catch (err) {
         setError(err.message);
-      } finally {
-        setLoading(false);
+        setLoading(false); // Set loading to false on error
       }
     };
 
@@ -62,87 +59,90 @@ export default function Cart() {
     }
   }, [userID]);
 
-  useEffect(() => {
-    const fetchItemData = async () => {
-      try {
-        const promises = cartData.map(async (item) => {
-          const response = await axios.get(`http://localhost:5000/api/items/${item.itemID}`);
-          console.log("item id:", item.itemID);
-          return response.data;
-        });
-
-        const items = await Promise.all(promises);
-        const totalPrice = items.reduce((acc, item) => acc + item.price, 0);
-        setTotal(totalPrice);
-        setDetailedCartData(items);
-      } catch (err) {
-        setError(err.message);
-      }
-    };
-
-    if (cartData.length > 0) {
-      fetchItemData();
-    }
-  }, [cartData]);
-
-  const handleDelete = async (itemID) => {
+  const handleBuy = async (total) => {
+    
     try {
-      await axios.delete(`http://localhost:5000/api/carts/`, {
-        data: { itemID, userID }
+      const response = await axios.post('http://localhost:5000/api/buy-products', { 
+        userID: userID, 
+        products: cartData.map(item => item.itemID), 
+        totalPrice: total
       });
-
-      // Filter out the deleted item from the detailedCartData
-      const updatedCartData = detailedCartData.filter((item) => item.id !== itemID);
-      setDetailedCartData(updatedCartData);
-
-      // Update the total price
-      const totalPrice = updatedCartData.reduce((acc, item) => acc + item.price, 0);
-      setTotal(totalPrice);
+      console.log(response.status);
+      if (response.status === 200) {
+        toast.success("Items purchased successfully!");
+      } else {
+        toast.error("Failed to purchase items");
+      }
     } catch (err) {
-      setError(err.message);
+      console.error("Error purchasing items:", err);
+      toast.error("Failed to purchase items. Please try again later.");
+    }
+    try {
+      await axios.delete(`http://localhost:5000/api/carts/delete/${userID}`);
+      const promise = await axios.get(`http://localhost:5000/api/carts/${userID}`);
+        setCartData(promise.data);
+    } catch (err) {
+      console.error("Error:", err);
+    }
+  };
+
+  const handleDelete = async (id) => {
+    try {
+      setLoading(true);
+      const response = await axios.delete(`http://localhost:5000/api/carts/${id}`);
+
+      if (response.status === 200) {
+        const response = await axios.get(`http://localhost:5000/api/carts/${userID}`);
+        setCartData(response.data);
+        toast.success("Item deleted");
+      } else {
+        toast.error("Failed to delete item");
+      }
+    } catch (err) {
+      console.error("Error deleting item:", err);
+      toast.error("Failed to delete item. Please try again later.");
+    } finally {
+      setLoading(false);
     }
   };
 
   if (loading) {
-    return <p>Loading...</p>;
+    return <p className="text-center">Loading...</p>; // Centered loading message
   }
 
   if (error) {
-    return <p>Error: {error}</p>;
+    return <p className="text-center">Error: {error}</p>; // Centered error message
   }
 
   return (
     <div className="mt-10 p-6">
-      <h1 className="text-center font-bold text-3xl ga-maamli-regular mb-6">
-        CART
-      </h1>
+      <h1 className="text-center font-bold text-3xl mb-6">CART</h1>
       <div className="border border-gray-300 rounded-lg p-4">
-        <h1 className="text-center font-bold text-xl ga-maamli-regular mb-4">
-          Items:
-        </h1>
+        <h2 className="text-center font-bold text-xl mb-4">Items:</h2>
         <div className="space-y-4">
-          {detailedCartData.map((item) => (
-            <div
-              key={item.id}
-              className="border border-gray-200 rounded-lg p-4 bg-white shadow-sm flex flex-col md:flex-row md:items-center justify-between space-y-2 md:space-y-0"
-            >
-              <img className="w-10" src={item.image} alt="" />
-              <p className="font-semibold">Item Name: {item.name}</p>
-              <p>Price: ${item.price}</p>
-              <p>Category: {item.version}</p>
-              <RiDeleteBin6Fill
-                onClick={() => handleDelete(item.id)}
-                className="text-red-900 text-2xl cursor-pointer"
-              />
-            </div>
-          ))}
+          {cartData.map((item) => {
+            total += item.price; // Calculate total price
+            return (
+              <div
+                key={item.id}
+                className="border border-gray-200 rounded-lg p-4 bg-white shadow-sm flex flex-col md:flex-row md:items-center justify-between space-y-2 md:space-y-0"
+              >
+                <img className="w-10" src={item.image} alt="" />
+                <p className="font-semibold">Item Name: {item.name}</p>
+                <p>Price: ${item.price}</p>
+                <p>Date: {item.date.slice(0,10)}</p>
+                <RiDeleteBin6Fill
+                  onClick={() => handleDelete(item._id)}
+                  className="text-red-900 text-2xl cursor-pointer"
+                />
+              </div>
+            );
+          })}
         </div>
       </div>
       <div className="border-t border-gray-300 mt-6 pt-4 flex justify-between items-center">
         <p className="font-semibold">Total: ${total}</p>
-        <Button className="bg-blue-500 text-white py-2 px-4 rounded-lg">
-          Buy
-        </Button>
+        <Button onClick={() => handleBuy(total)} className="bg-blue-500 text-white py-2 px-4 rounded-lg">Buy</Button>
       </div>
     </div>
   );

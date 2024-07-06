@@ -104,9 +104,9 @@ export function NavMenu() {
         <Typography
           as="a"
           href="#"
-          className="mr-4 cursor-pointer py-1.5 font-medium"
+          className="mr-4 cursor-pointer py-1.5 font-medium playwrite-gb-s-regular"
         >
-         <Link to="/"> <span className="crimson">H</span>ALAL <span className="crimson">B</span>ROTHERS</Link>
+         <Link to="/"> <span className="crimson">H</span>alal <span className="crimson">B</span>rothers</Link>
         </Typography>
         <div className="hidden lg:block">{navList}</div>
         <div className="flex items-center gap-x-1">

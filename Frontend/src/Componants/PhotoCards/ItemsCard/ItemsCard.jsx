@@ -10,7 +10,8 @@ export default function ItemCard({ data }) {
   const { _id, name, price, image } = data;
   const { token, removeToken } = useToken();
   const navigate = useNavigate();
-  const [ID, setID] = useState(null);
+  const [userID, setUserID] = useState(null);
+  const [itemDetails, setItemDetails] = useState({});
 
   useEffect(() => {
     const verifyToken = async () => {
@@ -21,8 +22,7 @@ export default function ItemCard({ data }) {
         );
 
         if (response.status === 200 && response.data.valid) {
-          setID(response.data.decoded.id);
-          console.log(response.data.decoded.id)
+          setUserID(response.data.decoded.id);
         } else {
           console.log("Token verification failed:", response.data);
           removeToken();
@@ -33,34 +33,54 @@ export default function ItemCard({ data }) {
       }
     };
 
-    verifyToken();
-  }, [token, navigate, removeToken]);
+    if (token) {
+      verifyToken();
+    }
+  }, [token, removeToken]);
+
+  useEffect(() => {
+    const getItem = async () => {
+      try {
+        const response = await axios.get(
+          `http://localhost:5000/api/items/${_id}`
+        );
+
+        if (response.status === 200) {
+          setItemDetails(response.data);
+        } else {
+          console.log("Failed to get item details:", response.data);
+        }
+      } catch (error) {
+        console.error("Error fetching item details:", error);
+      }
+    };
+
+    getItem();
+  }, [_id]);
 
   const handleNavigate = (id) => {
-    console.log(id);
     navigate(`/check-items/${id}`);
   };
 
   const handleAddToCart = async () => {
-   if(token){
-    try {
-      const response = await axios.post(
-        "http://localhost:5000/api/carts",
-        {
-          userID: ID,
+    if (token) {
+      try {
+        const response = await axios.post("http://localhost:5000/api/carts", {
+          userID: userID,
           itemID: _id,
-        }
-      );
-      console.log("Item added to cart:", response.data);
-      // Optionally, you can navigate to the cart page or show a success message here
-    } catch (error) {
-      console.error("Error adding item to cart:", error);
-      // Handle error as needed
+          image: itemDetails.image,
+          name: itemDetails.name,
+          price: itemDetails.price,
+        });
+        console.log("Item added to cart:", response.data);
+        toast.success("Item added to cart");
+      } catch (error) {
+        console.error("Error adding item to cart:", error);
+        toast.error("Failed to add item to cart");
+      }
+    } else {
+      toast.error("Login First");
     }
-   }
-   else{
-     toast.error("Login First");
-   }
   };
 
   return (
@@ -68,7 +88,7 @@ export default function ItemCard({ data }) {
       <img
         className="w-[300px] h-[280px] object-cover cursor-pointer"
         src={image}
-        alt=""
+        alt={name}
         onClick={() => handleNavigate(_id)}
       />
       <div className="p-2">

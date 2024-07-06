@@ -6,21 +6,21 @@ export function HeroSection() {
       <Carousel loop={true} autoplay={true} className="rounded-xl">
         <div className="relative h-full">
           <img
-            src="https://images.unsplash.com/photo-1499696010180-025ef6e1a8f9?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1470&q=80"
+            src="https://i.ibb.co/GHvD6LM/347639460-728357819047403-8647272535606713979-n.jpg"
             alt="image 1"
             className="h-full w-full object-cover object-center rounded-xl blur-img"
           />
         </div>
         <div className="relative h-full">
           <img
-            src="https://images.unsplash.com/photo-1432462770865-65b70566d673?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=1950&q=80"
+            src="https://i.ibb.co/BBP8Qh1/345634909-3111444509157303-9011771167180568470-n.jpg"
             alt="image 2"
             className="h-full w-full object-cover object-center rounded-xl blur-img"
           />
         </div>
         <div className="relative h-full">
           <img
-            src="https://images.unsplash.com/photo-1497436072909-60f360e1d4b1?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2560&q=80"
+            src="https://i.ibb.co/rFR6R2M/352380162-728357882380730-5544731208207000603-n.jpg"
             alt="image 3"
             className="h-full w-full object-cover object-center rounded-xl blur-img"
           />
@@ -31,7 +31,6 @@ export function HeroSection() {
           <h1 className="sm:text-5xl md:text-6xl lg:text-7xl">Hello, <span></span></h1>
           <h1 className="sm:text-5xl md:text-6xl lg:text-7xl">Welcome to <span></span></h1>
           <h1 className="mb-8 sm:text-5xl md:text-6xl lg:text-7xl">Halal Brothers <span></span></h1>
-          <a className="mb-10 text-white get-button">Get Started</a>
         </div>
       </div>
     </div>

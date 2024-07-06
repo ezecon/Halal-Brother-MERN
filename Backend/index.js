@@ -42,6 +42,9 @@ app.use('/api/carts', cart);
 const purchase = require('./routes/buy.js')
 app.use('/api/buy-products',purchase);
 
+const reservation = require('./routes/reservation.js')
+app.use('/api/reservation',reservation);
+
 
 
 //start server

@@ -8,6 +8,7 @@ import { AdminHome } from "../../Pages/Admin/Home/AdminHome";
 import Profile from "../../Pages/Customer/Profile/Profile";
 import ProfileUpdate from "../../Pages/Customer/Profile/ProfileUpdate";
 import Cart from "../../Pages/Cart.jsx/Cart";
+import { Reservation } from "../../Pages/Reservation/Reservation";
 
 
 const router = createBrowserRouter([
@@ -26,6 +27,10 @@ const router = createBrowserRouter([
             {
                 path: '/cart',
                 element: <Cart/>
+            },
+            {
+                path: '/reservation',
+                element: <Reservation/>
             },
             {
                 path: '/profile',

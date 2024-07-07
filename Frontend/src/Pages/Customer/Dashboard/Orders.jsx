@@ -57,7 +57,7 @@ export default function Order() {
         );
 
         setData(productDetails);
-        setLoading(false); // Set loading to false after data is fetched
+        setLoading(false); 
       } catch (err) {
         setError(err.message);
         setLoading(false); // Set loading to false on error

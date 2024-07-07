@@ -61,28 +61,33 @@ export default function Cart() {
 
   const handleBuy = async (total) => {
     
-    try {
-      const response = await axios.post('http://localhost:5000/api/buy-products', { 
-        userID: userID, 
-        products: cartData.map(item => item.itemID), 
-        totalPrice: total
-      });
-      console.log(response.status);
-      if (response.status === 200) {
-        toast.success("Items purchased successfully!");
-      } else {
-        toast.error("Failed to purchase items");
-      }
-    } catch (err) {
-      console.error("Error purchasing items:", err);
-      toast.error("Failed to purchase items. Please try again later.");
+    if(total===0){
+      toast.error("Cart is empty!")
     }
-    try {
-      await axios.delete(`http://localhost:5000/api/carts/delete/${userID}`);
-      const promise = await axios.get(`http://localhost:5000/api/carts/${userID}`);
-        setCartData(promise.data);
-    } catch (err) {
-      console.error("Error:", err);
+    else{
+      try {
+        const response = await axios.post('http://localhost:5000/api/buy-products', { 
+          userID: userID, 
+          products: cartData.map(item => item.itemID), 
+          totalPrice: total
+        });
+        console.log(response.status);
+        if (response.status === 200) {
+          toast.success("Items purchased successfully!");
+        } else {
+          toast.error("Failed to purchase items");
+        }
+      } catch (err) {
+        console.error("Error purchasing items:", err);
+        toast.error("Failed to purchase items. Please try again later.");
+      }
+      try {
+        await axios.delete(`http://localhost:5000/api/carts/delete/${userID}`);
+        const promise = await axios.get(`http://localhost:5000/api/carts/${userID}`);
+          setCartData(promise.data);
+      } catch (err) {
+        console.error("Error:", err);
+      }
     }
   };
 

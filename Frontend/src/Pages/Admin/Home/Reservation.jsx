@@ -1,8 +1,8 @@
 import { useToken } from "../../../Componants/Hook/useToken";
-import { useNavigate, Link } from "react-router-dom";
+import { useNavigate} from "react-router-dom";
 import { useEffect, useState } from "react";
 import axios from "axios";
-import { Button, Menu, MenuHandler, MenuList, MenuItem, Collapse, Card, CardBody, Typography } from "@material-tailwind/react";
+import { Button, Menu, MenuHandler, MenuList, MenuItem, Collapse, Card, CardBody, Typography, Dialog, DialogHeader, DialogBody } from "@material-tailwind/react";
 
 export default function Reservation() {
   const { token, removeToken } = useToken();
@@ -11,7 +11,12 @@ export default function Reservation() {
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [openMap, setOpenMap] = useState({}); // Store open state for each item
+  const [openMap, setOpenMap] = useState({}); 
+  const [open, setOpen] = useState(false);
+  
+  const [customer, setCustomer] = useState(null);
+
+  const handleOpen = () => setOpen(!open);
 
   useEffect(() => {
     const verifyToken = async () => {
@@ -83,6 +88,22 @@ export default function Reservation() {
     return <p className="text-center">Error: {error}</p>; // Centered error message
   }
 
+  const handleUser = async (id) => {
+    try {
+      const response = await axios.get(`http://localhost:5000/api/users/${id}`);
+      if (response.status === 200) {
+        setCustomer(response.data);
+        handleOpen();
+      } else {
+        console.log(response.data);
+      }
+    } catch (err) {
+      console.error(err);
+    }
+  };
+  const handleDetailsClick = (userId) => {
+    handleUser(userId);
+  };
   return (
     <div className="mt-10 p-6">
       <h1 className="text-center font-bold text-3xl mb-6">Reservation</h1>
@@ -96,9 +117,24 @@ export default function Reservation() {
                 key={item._id}
                 className="border border-gray-200 rounded-lg p-4 bg-white shadow-sm flex flex-col md:flex-row md:items-center justify-between space-y-2 md:space-y-0"
               >
-                <Link to={`/user/${item.userID}`}>
-                  <Button>User</Button>
-                </Link>
+                <Button onClick={() => handleDetailsClick(item.userID)}>User Details</Button>
+                <Dialog open={open} handler={handleOpen}>
+                  <DialogHeader>User Information</DialogHeader>
+                  <DialogBody>
+                    {customer ? (
+                      <div>
+                        <img className="w-16 rounded mb-4" src={customer.image} alt="" />
+                        <p><span className="crimson font-bold">Name:</span> {customer.name}</p>
+                        <p><span className="crimson font-bold">Number:</span> {customer.number}</p>
+                        <p><span className="crimson font-bold">Email:</span> {customer.email}</p>
+                        <p><span className="crimson font-bold">Address:</span> {customer.address}</p>
+                        
+                      </div>
+                    ) : (
+                      <p>Loading user information...</p>
+                    )}
+                  </DialogBody>
+                </Dialog>
                 <p className="p-1"><span className="crimson">Date:</span> <br/>{item.date}</p>
                 <p className="pr-1"><span className="crimson">Time:</span> <br/> {item.time}</p>
                 <p className="pr-1"><span className="crimson">Seat:</span> <br/> {item.seat}</p>
@@ -120,8 +156,8 @@ export default function Reservation() {
                   <Card className="my-4 mx-auto w-6/12">
                     <CardBody>
                       <Typography>
-                        <p>Occasion: {item.reason}</p>
-                        <p>Special Request: {item.query}</p>
+                        <p><span className="crimson font-bold">Occasion: </span>{item.reason}</p>
+                        <p><span className="crimson font-bold">Special Request:</span> {item.query}</p>
                       </Typography>
                     </CardBody>
                   </Card>

@@ -32,6 +32,20 @@ router.get('/:userID', async (req, res) => {
     res.status(500).json({ message: 'Server error', error });
   }
 });
+//find by user id
+router.put('/:id', async (req, res) => {
+  try {
+
+    const item = await Purchase.findByIdAndUpdate(req.params.id, req.body, {new: true});
+    if (item) {
+      res.status(200).json(item);
+    } else {
+      res.status(404).json({ message: 'Item not found' });
+    }
+  } catch (error) {
+    res.status(500).json({ message: 'Server error', error });
+  }
+});
 
 
 module.exports = router;

@@ -7,6 +7,10 @@ const purchaseSchema = new mongoose.Schema({
     },
     products: [{ type: String}],
     totalPrice: { type: Number, required: true },
+    status:{
+        type: String,
+        default: 'Pending'
+    },
     purchasedAt: { type: Date, default: Date.now },
 
 });

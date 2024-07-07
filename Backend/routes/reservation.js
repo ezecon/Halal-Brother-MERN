@@ -32,6 +32,8 @@ router.get('/byuser/:userID', async (req, res) => {
     res.status(500).json({ message: 'Server error', error });
   }
 });
+
+
 router.get('/', async (req, res) => {
   try {
     const item = await reservation.find();

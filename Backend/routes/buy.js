@@ -19,4 +19,19 @@ router.post('/', async (req, res) => {
 });
 
 
+//find by user id
+router.get('/:userID', async (req, res) => {
+  try {
+    const item = await Purchase.find({ userID: req.params.userID });
+    if (item) {
+      res.status(200).json(item);
+    } else {
+      res.status(404).json({ message: 'Item not found' });
+    }
+  } catch (error) {
+    res.status(500).json({ message: 'Server error', error });
+  }
+});
+
+
 module.exports = router;

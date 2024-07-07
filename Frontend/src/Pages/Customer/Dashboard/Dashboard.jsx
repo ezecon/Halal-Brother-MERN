@@ -9,15 +9,14 @@ import {
 import { FaHamburger } from "react-icons/fa";
 import { MdTableRestaurant } from "react-icons/md";
 import Reservation from "./Reservation";
+import Order from "./Orders";
 export function Dashboard() {
   const data = [
     {
       label: "Order History",
       value: "dashboard",
       icon: FaHamburger,
-      desc: `It really matters and then like it really doesn't matter.
-      What matters is the people who are sparked by it. And the people
-      who are like offended by it, it doesn't matter.`,
+      desc: <Order/>,
     },
     {
       label: "Reservation History",

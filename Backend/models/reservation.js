@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 
 const reservationSchema = new mongoose.Schema({
-    userId:{
+    userID:{
         type: String,
         require: true,
     },
@@ -24,6 +24,10 @@ const reservationSchema = new mongoose.Schema({
     query:{
         type: String,
         default:""
+    },
+    status:{
+        type: String,
+        default:"pending"
     },
 });
 

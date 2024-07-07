@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import ItemCard from "../../Componants/PhotoCards/ItemsCard/ItemsCard";
-import { Button, Option, Select } from "@material-tailwind/react";
+import { Button, Option, Select, Spinner } from "@material-tailwind/react";
 import { useNavigate } from "react-router-dom";
 import { useToken } from '../../Componants/Hook/useToken';
 import axios from 'axios';
@@ -73,7 +73,7 @@ export default function Products() {
   };
 
   if (loading) {
-    return <div>Loading...</div>;
+    return <div className="flex gap-2 mt-10 text-center"> <Spinner className="h-8 w-8" />Loading...</div>;
   }
 
   return (

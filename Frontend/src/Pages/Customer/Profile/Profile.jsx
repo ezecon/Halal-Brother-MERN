@@ -1,26 +1,85 @@
 import { Button } from "@material-tailwind/react";
+import { useToken } from "../../../Componants/Hook/useToken";
+import { Link, useNavigate } from "react-router-dom";
+import { useEffect, useState } from "react";
+import axios from "axios";
 
 export default function Profile() {
+  const { token, removeToken } = useToken();
+  const navigate = useNavigate();
+  const [userID, setUserID] = useState(null);
+  const [userInfo, setUserInfo] = useState(null);
+
+  useEffect(() => {
+    const verifyToken = async () => {
+      try {
+        if (!token) {
+          navigate('/login');
+          return;
+        }
+
+        const response = await axios.post('http://localhost:5000/api/verifyToken', { token });
+
+        if (response.status === 200 && response.data.valid) {
+          setUserID(response.data.decoded.id);
+        } else {
+          console.log("Token verification failed:", response.data);
+          removeToken();
+          navigate('/login');
+        }
+      } catch (error) {
+        console.error('Error verifying token:', error);
+        removeToken();
+        navigate('/login');
+      }
+    };
+    verifyToken();
+  }, [token, navigate, removeToken]);
+
+  useEffect(() => {
+    if (!userID) return;
+
+    const fetchUserInfo = async () => {
+      try {
+        const response = await axios.get(`http://localhost:5000/api/users/${userID}`);
+        if (response.status === 200) {
+          setUserInfo(response.data);
+        } else {
+          console.log(response.data);
+        }
+      } catch (err) {
+        console.error(err);
+      }
+    };
+    fetchUserInfo();
+  }, [userID]);
+
   return (
-    <div className="flex justify-center">
-      <div className="bg-blue-gray-500 m-4 sm:m-10 p-4 sm:p-10 flex flex-col sm:flex-row border-white rounded-lg max-w-screen-md w-full">
-        <div className="w-full sm:w-40">
-          <img
-            className="border-white rounded w-full sm:w-auto"
-            src="https://scontent.fdac8-1.fna.fbcdn.net/v/t39.30808-6/378327503_2323202168067724_5512786837058323955_n.jpg?stp=cp6_dst-jpg&_nc_cat=100&ccb=1-7&_nc_sid=6ee11a&_nc_eui2=AeEpKbDWaH9Agw0fwkO8whL_VOvpMrfLsshU6-kyt8uyyJ0pqkZsWcQsIQ0SU-QbeGxb_EwZ9aChQ6hVJRvtaw62&_nc_ohc=-eAGNJhpKGAQ7kNvgH_CYOU&_nc_ht=scontent.fdac8-1.fna&oh=00_AYAkJXvlp20w3D6oZfzgbyhgJ_gdOMTZITbmTkK0lfP3Ig&oe=668D3FA5"
-            alt="Profile"
-          />
-        </div>
-        <div className="mt-4 sm:mt-0 sm:pl-10 flex flex-col justify-center">
-          <div className="text-white">
-            <p>Name: hdufdhhf</p>
-            <p>Address:</p>
-            <p>Number:</p>
-            <p>Email:</p>
+    <div>
+       {userInfo ? ( <div className="flex justify-center">
+        <div className="bg-blue-gray-500 m-4 sm:m-10 p-4 sm:p-10 flex flex-col sm:flex-row border-white rounded-lg max-w-screen-md w-full">
+          <div className="w-full sm:w-40">
+            <img
+              className="border-white rounded w-full sm:w-auto"
+              src={userInfo.image}
+              alt="Profile"
+            />
           </div>
-          <Button className="mt-4">Update Profile</Button>
+          <div className="mt-4 sm:mt-0 sm:pl-10 flex flex-col justify-center">
+            
+              <div className="text-white playwrite-gb-s-regular">
+                <p>Name: {userInfo.name}</p>
+                <p>Address: {userInfo.address}</p>
+                <p>Number: {userInfo.number}</p>
+                <p>Email: {userInfo.email}</p>
+              </div>
+           
+            <Link to="/profile-update"><Button className="mt-4">Update Profile</Button></Link>
+          </div>
         </div>
-      </div>
+      </div> ) : (
+              <div className="text-white">Loading...</div>
+            )}
     </div>
   );
 }

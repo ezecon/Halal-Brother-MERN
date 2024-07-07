@@ -7,6 +7,7 @@ import {
 } from "@material-tailwind/react";
 import AllOrder from "../AllOrder/AllOrder";
 import { Inventory } from "../Inventory/Inventory/Inventory";
+import Reservation from "./Reservation";
 
 export  function AdminHome() {
   const data = [
@@ -22,11 +23,9 @@ export  function AdminHome() {
       to follow my dreams and inspire other people to follow their dreams, too.`,
     },
     {
-      label: "RIDER",
+      label: "Reservation",
       value: "rider",
-      desc: `We're not always in the position that we want to be at.
-      We're constantly growing. We're constantly making mistakes. We're
-      constantly trying to express ourselves and actualize our dreams.`,
+      desc: <Reservation/>,
     },
     {
       label: "INCOME",

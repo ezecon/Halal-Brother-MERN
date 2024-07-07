@@ -21,6 +21,7 @@ export function NavMenu() {
   const { token, removeToken } = useToken();
   const navigate = useNavigate();
   const [userID, setUserID] = useState(null);
+  const [userInfo, setUserInfo] = useState(null);
 
   useEffect(() => {
     const verifyToken = async () => {
@@ -43,6 +44,24 @@ export function NavMenu() {
 
     verifyToken();
   }, [token, navigate, removeToken]);
+
+  useEffect(() => {
+    if (!userID) return;
+
+    const fetchUserInfo = async () => {
+      try {
+        const response = await axios.get(`http://localhost:5000/api/users/${userID}`);
+        if (response.status === 200) {
+          setUserInfo(response.data);
+        } else {
+          console.log(response.data);
+        }
+      } catch (err) {
+        console.error(err);
+      }
+    };
+    fetchUserInfo();
+  }, [userID]);
 
 
   const [openNav, setOpenNav] = useState(false);
@@ -115,7 +134,7 @@ export function NavMenu() {
             <Menu>
                   <MenuHandler>
                   <Avatar
-                          src="https://scontent.fdac8-1.fna.fbcdn.net/v/t39.30808-6/378327503_2323202168067724_5512786837058323955_n.jpg?stp=cp6_dst-jpg&_nc_cat=100&ccb=1-7&_nc_sid=6ee11a&_nc_eui2=AeEpKbDWaH9Agw0fwkO8whL_VOvpMrfLsshU6-kyt8uyyJ0pqkZsWcQsIQ0SU-QbeGxb_EwZ9aChQ6hVJRvtaw62&_nc_ohc=-eAGNJhpKGAQ7kNvgH_CYOU&_nc_ht=scontent.fdac8-1.fna&oh=00_AYAkJXvlp20w3D6oZfzgbyhgJ_gdOMTZITbmTkK0lfP3Ig&oe=668D3FA5"
+                         src={userInfo ? userInfo.image: 'https://i.pinimg.com/736x/3f/94/70/3f9470b34a8e3f526dbdb022f9f19cf7.jpg'}
                           alt="avatar"
                           withBorder={true}
                           className="p-0.5 border-red-50"
@@ -123,7 +142,7 @@ export function NavMenu() {
                   </MenuHandler>
                   <MenuList>
                     <Link to="/profile"><MenuItem>Profile</MenuItem></Link>
-                    <MenuItem>Dashboard</MenuItem>
+                    <Link to="/dashboard"><MenuItem>Dashboard</MenuItem></Link>
                     <MenuItem>Logout</MenuItem>
                   </MenuList>
            </Menu>

@@ -9,6 +9,7 @@ import Profile from "../../Pages/Customer/Profile/Profile";
 import ProfileUpdate from "../../Pages/Customer/Profile/ProfileUpdate";
 import Cart from "../../Pages/Cart.jsx/Cart";
 import { Reservation } from "../../Pages/Reservation/Reservation";
+import { Dashboard } from "../../Pages/Customer/Dashboard/Dashboard";
 
 
 const router = createBrowserRouter([
@@ -35,6 +36,10 @@ const router = createBrowserRouter([
             {
                 path: '/profile',
                 element: <Profile />
+            },
+            {
+                path: '/dashboard',
+                element: <Dashboard />
             },
             {
                 path: '/profile-update',

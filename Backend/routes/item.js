@@ -34,6 +34,7 @@ router.get('/:id', async (req, res) => {
     }
 });
 
+
 // Get all items
 router.get('/', async (req, res) => {
     try {

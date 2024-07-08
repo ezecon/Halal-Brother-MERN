@@ -22,7 +22,7 @@ export function Reservation() {
           return;
         }
 
-        const response = await axios.post('http://localhost:5000/api/verifyToken', { token });
+        const response = await axios.post('https://halal-brother-server.vercel.app/api/verifyToken', { token });
 
         if (response.status === 200 && response.data.valid) {
           setUserID(response.data.decoded.id);
@@ -59,7 +59,7 @@ export function Reservation() {
     };
 
     try {
-      await axios.post('http://localhost:5000/api/reservation', postData);
+      await axios.post('https://halal-brother-server.vercel.app/api/reservation', postData);
       toast.success('Reservation request sent successfully!');
       // Reset form
       setDate('');

@@ -27,7 +27,7 @@ export default function OfflineOrder() {
   useEffect(() => {
     const verifyToken = async () => {
       try {
-        const response = await axios.post('http://localhost:5000/api/verifyToken', { token });
+        const response = await axios.post('https://halal-brother-server.vercel.app/api/verifyToken', { token });
 
         if (response.status === 200 && response.data.valid) {
           setAdminID(response.data.decoded.id);
@@ -45,7 +45,7 @@ export default function OfflineOrder() {
   }, [token, navigate, removeToken]);
 
   useEffect(() => {
-    fetch("http://localhost:5000/api/items")
+    fetch("https://halal-brother-server.vercel.app/api/items")
       .then((res) => res.json())
       .then((data) => {
         setProducts(data);
@@ -98,7 +98,7 @@ export default function OfflineOrder() {
   const handleUser = async (id) => {
     console.log(id);
     try {
-      const response = await axios.get(`http://localhost:5000/api/carts/admin/${id}`);
+      const response = await axios.get(`https://halal-brother-server.vercel.app/api/carts/admin/${id}`);
       if (response.status === 200) {
         setCustomer(response.data);
         handleOpen();
@@ -111,8 +111,8 @@ export default function OfflineOrder() {
   };
  const handleAutoDelete = async()=>{
     try {
-        await axios.delete(`http://localhost:5000/api/carts/delete/${adminID}`);
-        const promise = await axios.get(`http://localhost:5000/api/carts/admin/${adminID}`);
+        await axios.delete(`https://halal-brother-server.vercel.app/api/carts/delete/${adminID}`);
+        const promise = await axios.get(`https://halal-brother-server.vercel.app/api/carts/admin/${adminID}`);
         setCustomer(promise.data);
       } catch (err) {
         console.error("Error:", err);
@@ -121,7 +121,7 @@ export default function OfflineOrder() {
 
  const handleTotalIncome = async ()=>{
   try{
-    const response = await axios.post(`http://localhost:5000/api/incomes`,{
+    const response = await axios.post(`https://halal-brother-server.vercel.app//api/incomes`,{
       userID: adminID,
       income: total,
     });
@@ -135,7 +135,7 @@ export default function OfflineOrder() {
  }
   const handleOfflineOrder = async () => {
     try {
-      const response = await axios.post('http://localhost:5000/api/offline-order', {
+      const response = await axios.post('https://halal-brother-server.vercel.app/api/offline-order', {
         adminID: adminID,
         products: productsName,
         productsID: productsID,

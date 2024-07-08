@@ -11,7 +11,7 @@ export default function Items() {
     useEffect(() => {
         const fetchItem = async () => {
             try {
-                const response = await axios.get(`http://localhost:5000/api/items/${id}`);
+                const response = await axios.get(`https://halal-brother-server.vercel.app/api/items/${id}`);
                 if (response.status === 200) {
                     setInfo(response.data);
                 } else {

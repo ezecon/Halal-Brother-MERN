@@ -24,7 +24,7 @@ export default function ProfileUpdate() {
           return;
         }
 
-        const response = await axios.post('http://localhost:5000/api/verifyToken', { token });
+        const response = await axios.post('https://halal-brother-server.vercel.app/api/verifyToken', { token });
 
         if (response.status === 200 && response.data.valid) {
           setUserID(response.data.decoded.id);
@@ -45,7 +45,7 @@ export default function ProfileUpdate() {
 
     const fetchUserInfo = async () => {
       try {
-        const response = await axios.get(`http://localhost:5000/api/users/${userID}`);
+        const response = await axios.get(`https://halal-brother-server.vercel.app/api/users/${userID}`);
         if (response.status === 200) {
           setUserInfo(response.data);
         } else {
@@ -66,7 +66,7 @@ export default function ProfileUpdate() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.put(`http://localhost:5000/api/users/${userID}`, userInfo);
+      const response = await axios.put(`https://halal-brother-server.vercel.app/api/users/${userID}`, userInfo);
       if (response.status === 200) {
         console.log('Profile updated successfully');
         navigate('/profile');

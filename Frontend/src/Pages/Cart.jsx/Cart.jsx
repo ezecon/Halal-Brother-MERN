@@ -23,7 +23,7 @@ export default function Cart() {
           return;
         }
 
-        const response = await axios.post('http://localhost:5000/api/verifyToken', { token });
+        const response = await axios.post('https://halal-brother-server.vercel.app/api/verifyToken', { token });
 
         if (response.status === 200 && response.data.valid) {
           setUserID(response.data.decoded.id);
@@ -45,7 +45,7 @@ export default function Cart() {
   useEffect(() => {
     const fetchCartData = async () => {
       try {
-        const response = await axios.get(`http://localhost:5000/api/carts/${userID}`);
+        const response = await axios.get(`https://halal-brother-server.vercel.app/api/carts/${userID}`);
         setCartData(response.data);
         setLoading(false); // Set loading to false after data is fetched
       } catch (err) {
@@ -66,7 +66,7 @@ export default function Cart() {
     }
     else{
       try {
-        const response = await axios.post('http://localhost:5000/api/buy-products', { 
+        const response = await axios.post('https://halal-brother-server.vercel.app/api/buy-products', { 
           userID: userID, 
           products: cartData.map(item => item.itemID), 
           totalPrice: total
@@ -82,8 +82,8 @@ export default function Cart() {
         toast.error("Failed to purchase items. Please try again later.");
       }
       try {
-        await axios.delete(`http://localhost:5000/api/carts/delete/${userID}`);
-        const promise = await axios.get(`http://localhost:5000/api/carts/${userID}`);
+        await axios.delete(`https://halal-brother-server.vercel.app/api/carts/delete/${userID}`);
+        const promise = await axios.get(`https://halal-brother-server.vercel.app/api/carts/${userID}`);
           setCartData(promise.data);
       } catch (err) {
         console.error("Error:", err);
@@ -94,10 +94,10 @@ export default function Cart() {
   const handleDelete = async (id) => {
     try {
       setLoading(true);
-      const response = await axios.delete(`http://localhost:5000/api/carts/${id}`);
+      const response = await axios.delete(`https://halal-brother-server.vercel.app/api/carts/${id}`);
 
       if (response.status === 200) {
-        const response = await axios.get(`http://localhost:5000/api/carts/${userID}`);
+        const response = await axios.get(`https://halal-brother-server.vercel.app/api/carts/${userID}`);
         setCartData(response.data);
         toast.success("Item deleted");
       } else {

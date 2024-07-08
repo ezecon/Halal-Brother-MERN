@@ -15,7 +15,7 @@ const IncomeComponent = () => {
       e.preventDefault();
   
       try {
-        const response = await axios.get('http://localhost:5000/api/incomes', {
+        const response = await axios.get('https://halal-brother-server.vercel.app/api/incomes', {
           params: {
             to,
             from,

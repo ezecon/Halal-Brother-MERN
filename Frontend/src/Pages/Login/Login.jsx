@@ -37,7 +37,7 @@ export function Login() {
     };
 
     try {
-      const response = await axios.post('http://localhost:5000/api/login', user);
+      const response = await axios.post('https://halal-brother-server.vercel.app/api/login', user);
       
       if (response.data.error) {
         toast.error(response.data.error); // Display error message

@@ -26,7 +26,7 @@ export default function Reservation() {
           return;
         }
 
-        const response = await axios.post('http://localhost:5000/api/verifyToken', { token });
+        const response = await axios.post('https://halal-brother-server.vercel.app/api/verifyToken', { token });
 
         if (response.status === 200 && response.data.valid) {
           setUserID(response.data.decoded.id);
@@ -48,7 +48,7 @@ export default function Reservation() {
   useEffect(() => {
     const fetchReservationData = async () => {
       try {
-        const response = await axios.get(`http://localhost:5000/api/reservation/`);
+        const response = await axios.get(`https://halal-brother-server.vercel.app/api/reservation/`);
         setData(response.data);
         setLoading(false); // Set loading to false after data is fetched
       } catch (err) {
@@ -64,7 +64,7 @@ export default function Reservation() {
 
   const handleStatusChange = async (reservationId, newStatus) => {
     try {
-      const response = await axios.put(`http://localhost:5000/api/reservation/${reservationId}`, { status: newStatus });
+      const response = await axios.put(`https://halal-brother-server.vercel.app/api/reservation/${reservationId}`, { status: newStatus });
       setData(data.map(item => item._id === reservationId ? { ...item, status: newStatus } : item));
       console.log(response.data); // Log or handle response as needed
     } catch (err) {
@@ -90,7 +90,7 @@ export default function Reservation() {
 
   const handleUser = async (id) => {
     try {
-      const response = await axios.get(`http://localhost:5000/api/users/${id}`);
+      const response = await axios.get(`https://halal-brother-server.vercel.app/api/users/${id}`);
       if (response.status === 200) {
         setCustomer(response.data);
         handleOpen();

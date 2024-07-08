@@ -14,7 +14,7 @@ export default function List() {
   useEffect(() => {
     const fetchItems = async () => {
       try {
-        const response = await axios.get('http://localhost:5000/api/items');
+        const response = await axios.get('https://halal-brother-server.vercel.app/api/items');
         if (response.status === 200) {
           setOrders(response.data);
         } else {
@@ -39,7 +39,7 @@ export default function List() {
   const handleStatusChange = async (id) => {
     const newCategory = selectValues[id];
     try {
-      const response = await axios.put(`http://localhost:5000/api/items/${id}`, { type: newCategory });
+      const response = await axios.put(`https://halal-brother-server.vercel.app/api/items/${id}`, { type: newCategory });
       if (response.status === 200) {
         setOrders((prev) =>
           prev.map((order) =>
@@ -57,7 +57,7 @@ export default function List() {
 
   const handleDelete = (id) => {
 
-    axios.delete(`http://localhost:5000/api/items/${id}`)
+    axios.delete(`https://halal-brother-server.vercel.app/api/items/${id}`)
     .then(response => {
     if (response.status === 200) {
            toast.success("Item deleted successfully");

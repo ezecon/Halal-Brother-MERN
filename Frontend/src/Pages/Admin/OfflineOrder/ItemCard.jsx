@@ -17,7 +17,7 @@ export default function ItemCard({ data }) {
     const verifyToken = async () => {
       try {
         const response = await axios.post(
-          "http://localhost:5000/api/verifyToken",
+          "https://halal-brother-server.vercel.app/api/verifyToken",
           { token }
         );
 
@@ -42,7 +42,7 @@ export default function ItemCard({ data }) {
     const getItem = async () => {
       try {
         const response = await axios.get(
-          `http://localhost:5000/api/items/${_id}`
+          `https://halal-brother-server.vercel.app/api/items/${_id}`
         );
 
         if (response.status === 200) {
@@ -65,7 +65,7 @@ export default function ItemCard({ data }) {
   const handleAddToCart = async () => {
     if (token) {
       try {
-        const response = await axios.post("http://localhost:5000/api/carts", {
+        const response = await axios.post("https://halal-brother-server.vercel.app/api/carts", {
           userID: adminID,
           itemID: _id,
           image: itemDetails.image,

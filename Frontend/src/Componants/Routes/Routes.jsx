@@ -10,6 +10,7 @@ import ProfileUpdate from "../../Pages/Customer/Profile/ProfileUpdate";
 import Cart from "../../Pages/Cart.jsx/Cart";
 import { Reservation } from "../../Pages/Reservation/Reservation";
 import { Dashboard } from "../../Pages/Customer/Dashboard/Dashboard";
+import Items from "../Items/Items";
 
 
 const router = createBrowserRouter([
@@ -28,6 +29,10 @@ const router = createBrowserRouter([
             {
                 path: '/cart',
                 element: <Cart/>
+            },
+            {
+                path: '/check-items/:id',
+                element: <Items/>
             },
             {
                 path: '/reservation',

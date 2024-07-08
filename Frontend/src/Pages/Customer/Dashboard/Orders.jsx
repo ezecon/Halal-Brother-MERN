@@ -60,7 +60,7 @@ export default function Order() {
         setLoading(false); 
       } catch (err) {
         setError(err.message);
-        setLoading(false); // Set loading to false on error
+        setLoading(false); 
       }
     };
 
@@ -70,11 +70,11 @@ export default function Order() {
   }, [userID]);
 
   if (loading) {
-    return <p className="text-center">Loading...</p>; // Centered loading message
+    return <p className="text-center">Loading...</p>; 
   }
 
   if (error) {
-    return <p className="text-center">Error: {error}</p>; // Centered error message
+    return <p className="text-center">Error: {error}</p>; 
   }
 
   function splitDateTime(dateTimeString) {
@@ -90,7 +90,7 @@ export default function Order() {
       <div className="border border-gray-300 rounded-lg p-4">
         <div className="space-y-4">
           {data.reverse().map((item) => {
-            let total = 0; // Initialize total for each order
+            let total = 0; 
             const { date, time } = splitDateTime(item.purchasedAt);
             return (
               <div
@@ -101,7 +101,7 @@ export default function Order() {
                   <p className="font-bold">Products:</p>
                   <div>
                     {item.productDetails.map((product) => {
-                      total += product.price; // Accumulate total price
+                      total += product.price; 
                       return (
                         <p key={product.id} className="flex p-2">
                           <img className="w-8 mr-2" src={product.image} alt={product.name} /> - {product.name}

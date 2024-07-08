@@ -46,6 +46,10 @@ const reservation = require('./routes/reservation.js')
 app.use('/api/reservation',reservation);
 
 
+const offlineOrder = require('./routes/offlineOrder.js')
+app.use('/api/offline-order',offlineOrder);
+
+
 
 //start server
 

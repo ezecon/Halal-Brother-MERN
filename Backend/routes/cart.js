@@ -4,10 +4,10 @@ const Cart = require('../models/Cart');
 
 // Add item to cart
 router.post('/', async (req, res) => {
-    const { itemID, userID, image, name, price } = req.body;
+    const { itemID, userID, image, name,user, price } = req.body;
 
     try {
-        const newCartItem = new Cart({ itemID, userID, image, name, price });
+        const newCartItem = new Cart({ itemID, userID, image, name,user, price });
         await newCartItem.save();
         res.status(201).json(newCartItem);
     } catch (error) {
@@ -21,6 +21,16 @@ router.get('/:userID', async (req, res) => {
 
     try {
         const cartItems = await Cart.find({ userID });
+        res.status(200).json(cartItems);
+    } catch (error) {
+        res.status(500).json({ message: 'Server error', error });
+    }
+});
+// Get cart items for a admin
+router.get('/admin/:id', async (req, res) => {
+
+    try {
+        const cartItems = await Cart.find({ userID:req.params.id, user:'Admin' });
         res.status(200).json(cartItems);
     } catch (error) {
         res.status(500).json({ message: 'Server error', error });

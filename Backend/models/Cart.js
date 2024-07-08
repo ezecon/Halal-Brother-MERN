@@ -23,6 +23,10 @@ const cartSchema = new mongoose.Schema({
         type: String,
         require: true,
     },
+    user:{
+        type: String,
+        default:'Customer',
+    },
     date:{
         type: Date,
         default: Date.now,

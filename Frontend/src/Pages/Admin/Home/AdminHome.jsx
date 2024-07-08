@@ -8,6 +8,7 @@ import {
 import AllOrder from "../AllOrder/AllOrder";
 import { Inventory } from "../Inventory/Inventory/Inventory";
 import Reservation from "./Reservation";
+import OfflineOrder from "../OfflineOrder/OfflineOrder";
 
 export  function AdminHome() {
   const data = [
@@ -19,8 +20,7 @@ export  function AdminHome() {
     {
       label: "OFFLINE ORDERS",
       value: "offline",
-      desc: `Because it's about motivating the doers. Because I'm here
-      to follow my dreams and inspire other people to follow their dreams, too.`,
+      desc: <OfflineOrder/>,
     },
     {
       label: "Reservation",

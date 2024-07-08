@@ -1,29 +1,33 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Card, Typography, Button } from "@material-tailwind/react";
 import { Link } from "react-router-dom";
+import axios from 'axios';
+import toast from 'react-hot-toast';
 
-const TABLE_HEAD = ["Date", "Name", "Category", "Actions"];
-
-const initialOrders = [
-  // Add your initial orders data here for testing
-  {
-    _id: "1",
-    date: "2023-07-01",
-    name: "Bike A",
-    category: "Available",
-  },
-  {
-    _id: "2",
-    date: "2023-06-25",
-    name: "Bike B",
-    category: "On Rent",
-  },
-  // Add more orders as needed
-];
+const TABLE_HEAD = ["Date", "Name", "Category","Price", "Actions"];
 
 export default function List() {
-  const [orders, setOrders] = useState(initialOrders);
+  const [orders, setOrders] = useState([]);
   const [selectValues, setSelectValues] = useState({});
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchItems = async () => {
+      try {
+        const response = await axios.get('http://localhost:5000/api/items');
+        if (response.status === 200) {
+          setOrders(response.data);
+        } else {
+          console.log("Something went wrong!");
+        }
+      } catch (err) {
+        console.log(err);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchItems();
+  }, []);
 
   const handleSelectChange = (id, value) => {
     setSelectValues((prev) => ({
@@ -32,19 +36,41 @@ export default function List() {
     }));
   };
 
-  const handleStatusChange = (id) => {
-    setOrders((prev) =>
-      prev.map((order) =>
-        order._id === id ? { ...order, category: selectValues[id] } : order
-      )
-    );
-    // Optionally, you can send the updated status to the server here
+  const handleStatusChange = async (id) => {
+    const newCategory = selectValues[id];
+    try {
+      const response = await axios.put(`http://localhost:5000/api/items/${id}`, { type: newCategory });
+      if (response.status === 200) {
+        setOrders((prev) =>
+          prev.map((order) =>
+            order._id === id ? { ...order, category: newCategory } : order
+          )
+        );
+        toast.success("Status updated successfully");
+      } else {
+        console.log("Something went wrong!");
+      }
+    } catch (err) {
+      console.log(err);
+    }
   };
 
   const handleDelete = (id) => {
-    setOrders((prev) => prev.filter((order) => order._id !== id));
-    // Optionally, you can send the delete request to the server here
+
+    axios.delete(`http://localhost:5000/api/items/${id}`)
+    .then(response => {
+    if (response.status === 200) {
+           toast.success("Item deleted successfully");
+         }
+       })
+      .catch(err => {
+        console.log(err);
+      });
   };
+
+  if (loading) {
+    return <div>Loading...</div>;
+  }
 
   return (
     <div>
@@ -70,16 +96,19 @@ export default function List() {
             </tr>
           </thead>
           <tbody>
-            {orders.reverse().map((item) => (
+            {orders.map((item) => (
               <tr key={item._id}>
                 <td className="p-2">
+                  <img className='w-8' src={item.image} alt="" />
+                </td>
+                <td className="p-2">
                   <Typography
                     as="div"
                     variant="small"
                     color="blue-gray"
                     className="font-medium"
                   >
-                    {item.date.slice(0, 10)}
+                    {item.name || 'N/A'}
                   </Typography>
                 </td>
                 <td className="p-2">
@@ -89,7 +118,7 @@ export default function List() {
                     color="blue-gray"
                     className="font-medium"
                   >
-                    {item.name}
+                    {item.version || 'N/A'}
                   </Typography>
                 </td>
                 <td className="p-2">
@@ -99,7 +128,7 @@ export default function List() {
                     color="blue-gray"
                     className="font-medium"
                   >
-                    {item.category}
+                    ৳{item.price || 'N/A'}
                   </Typography>
                 </td>
                 <td className="p-2">
@@ -112,11 +141,10 @@ export default function List() {
                     <div className="flex items-center gap-2">
                       <select
                         className="border p-1.5 rounded-md"
-                        value={selectValues[item._id] || item.category}
+                        value={selectValues[item._id] || item.type}
                         onChange={(e) => handleSelectChange(item._id, e.target.value)}
                       >
                         <option value="Unavailable">Unavailable</option>
-                        <option value="On Rent">On Rent</option>
                         <option value="Available">Available</option>
                       </select>
                       <Button size="sm" onClick={() => handleStatusChange(item._id)}>
@@ -129,8 +157,7 @@ export default function List() {
                       >
                         Delete
                       </Button>
-                      {/* Link to navigate to post detail */}
-                      <Link to={`/rent-now/${item._id}`} className="cursor-pointer">
+                      <Link to={`/check-items/${item._id}`} className="cursor-pointer">
                         <Button size="sm">View</Button>
                       </Link>
                     </div>

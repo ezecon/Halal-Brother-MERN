@@ -118,6 +118,21 @@ export default function OfflineOrder() {
         console.error("Error:", err);
       }
  }
+
+ const handleTotalIncome = async ()=>{
+  try{
+    const response = await axios.post(`http://localhost:5000/api/incomes`,{
+      userID: adminID,
+      income: total,
+    });
+    if(response.status===200){
+      console.log('money sent to cash')
+    }
+  }
+  catch(err){
+    console.log(err)
+  }
+ }
   const handleOfflineOrder = async () => {
     try {
       const response = await axios.post('http://localhost:5000/api/offline-order', {
@@ -135,6 +150,7 @@ export default function OfflineOrder() {
       console.error(err);
     }
     handleAutoDelete();
+    handleTotalIncome();
   };
 
   return (

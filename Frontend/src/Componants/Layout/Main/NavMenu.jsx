@@ -143,7 +143,7 @@ export function NavMenu() {
                   <MenuList>
                     <Link to="/profile"><MenuItem>Profile</MenuItem></Link>
                     <Link to="/dashboard"><MenuItem>Dashboard</MenuItem></Link>
-                    <MenuItem>Logout</MenuItem>
+                    <MenuItem onClick={removeToken}>Logout</MenuItem>
                   </MenuList>
            </Menu>
           ) : (

@@ -45,4 +45,23 @@ router.get('/', async (req, res) => {
     }
 });
 
+// delete items by id
+router.delete('/:id', async (req, res) => {
+    try {
+        const items = await Item.findByIdAndDelete(req.params.id);
+        res.status(200).json(items);
+    } catch (err) {
+        res.status(500).json({ message: err.message });
+    }
+});
+// update items by id
+router.put('/:id', async (req, res) => {
+    try {
+        const items = await Item.findByIdAndUpdate(req.params.id,req.body,{new: true});
+        res.status(200).json(items);
+    } catch (err) {
+        res.status(500).json({ message: err.message });
+    }
+});
+
 module.exports = router;

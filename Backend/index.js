@@ -50,6 +50,10 @@ const offlineOrder = require('./routes/offlineOrder.js')
 app.use('/api/offline-order',offlineOrder);
 
 
+const income = require('./routes/TotalIncome.js')
+app.use('/api/incomes',income);
+
+
 
 //start server
 

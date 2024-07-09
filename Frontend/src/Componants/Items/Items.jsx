@@ -5,10 +5,10 @@ import toast from "react-hot-toast";
 import { useParams } from "react-router-dom";
 
 export default function Items() {
-    const [info, setInfo] = useState(null); // Initialize state with null instead of empty string
+    const [info, setInfo] = useState(null); 
     const { id } = useParams();
 
-    useEffect(() => {
+    useEffect(() => {     
         const fetchItem = async () => {
             try {
                 const response = await axios.get(`https://halal-brother-server.vercel.app/api/items/${id}`);

@@ -1,8 +1,10 @@
 import { useToken } from "../../../Componants/Hook/useToken";
 import { useNavigate } from "react-router-dom";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import axios from "axios";
 import { Button, Dialog, DialogBody, DialogHeader, Menu, MenuHandler, MenuItem, MenuList } from "@material-tailwind/react";
+import OrderSlip from "./OderSlip"; 
+import { useReactToPrint } from "react-to-print";
 
 export default function AllOrder() {
   const { token, removeToken } = useToken();
@@ -13,8 +15,15 @@ export default function AllOrder() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [open, setOpen] = useState(false);
+  const [selectedOrder, setSelectedOrder] = useState(null);
+  const slipRef = useRef();
 
   const handleOpen = () => setOpen(!open);
+
+  const handlePrint = useReactToPrint({
+    content: () => slipRef.current,
+    documentTitle: 'OrderSlip',
+  });
 
   useEffect(() => {
     const verifyToken = async () => {
@@ -103,12 +112,34 @@ export default function AllOrder() {
     }
   };
 
-  const handleDetailsClick = (userId) => {
-    handleUser(userId);
+  const handleDetailsClick = (order) => {
+    setSelectedOrder(order);
+    handleUser(order.userID);
   };
 
-  const handleStatusChange = async (Id, newStatus) => {
+
+   const handleTotalIncome = async (total)=>{
+  try{
+    const response = await axios.post(`https://halal-brother-server.vercel.app/api/incomes`,{
+      userID: userID,
+      income: total,
+    });
+    if(response.status===200){
+      console.log('money sent to cash')
+    }
+  }
+  catch(err){
+    console.log(err)
+  }
+ }
+
+
+
+  const handleStatusChange = async (Id, newStatus,total) => {
     try {
+      if(newStatus==='Delivered'){
+        handleTotalIncome(total);
+      }
       const response = await axios.put(`https://halal-brother-server.vercel.app/api/buy-products/${Id}`, { status: newStatus });
       setData(data.map(item => item._id === Id ? { ...item, status: newStatus } : item));
       console.log(response.data);
@@ -154,14 +185,14 @@ export default function AllOrder() {
                       <Button>Change Status</Button>
                     </MenuHandler>
                     <MenuList>
-                      <MenuItem onClick={() => handleStatusChange(item._id, 'Accepted-Order')}>Accepted Order</MenuItem>
-                      <MenuItem onClick={() => handleStatusChange(item._id, 'On the way')}>On the way</MenuItem>
-                      <MenuItem onClick={() => handleStatusChange(item._id, 'Delivered')}>Delivered</MenuItem>
-                      <MenuItem onClick={() => handleStatusChange(item._id, 'Rejected')}>Reject</MenuItem>
+                      <MenuItem onClick={() => handleStatusChange(item._id, 'Accepted-Order',total)}>Accepted Order</MenuItem>
+                      <MenuItem onClick={() => handleStatusChange(item._id, 'On the way',total)}>On the way</MenuItem>
+                      <MenuItem onClick={() => handleStatusChange(item._id, 'Delivered',total)}>Delivered</MenuItem>
+                      <MenuItem onClick={() => handleStatusChange(item._id, 'Rejected',total)}>Reject</MenuItem>
                     </MenuList>
                   </Menu>
                 )}
-                <Button onClick={() => handleDetailsClick(item.userID)}>Details</Button>
+                <Button onClick={() => handleDetailsClick(item)}>Details</Button>
               </div>
             );
           })}
@@ -172,14 +203,10 @@ export default function AllOrder() {
         <DialogHeader>User Information</DialogHeader>
         <DialogBody>
           {customer ? (
-            <div>
-               <img className="w-16 rounded mb-4" src={customer.image} alt="" />
-              <p><span className="crimson font-bold">Name:</span> {customer.name}</p>
-              <p><span className="crimson font-bold">Number:</span> {customer.number}</p>
-              <p><span className="crimson font-bold">Email:</span> {customer.email}</p>
-              <p><span className="crimson font-bold">Address:</span> {customer.address}</p>
-              
-            </div>
+            <>
+              <OrderSlip ref={slipRef} order={selectedOrder} customer={customer} />
+              <Button onClick={handlePrint}>Print Slip</Button>
+            </>
           ) : (
             <p>Loading user information...</p>
           )}

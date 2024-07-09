@@ -121,7 +121,7 @@ export default function OfflineOrder() {
 
  const handleTotalIncome = async ()=>{
   try{
-    const response = await axios.post(`https://halal-brother-server.vercel.app//api/incomes`,{
+    const response = await axios.post(`https://halal-brother-server.vercel.app/api/incomes`,{
       userID: adminID,
       income: total,
     });

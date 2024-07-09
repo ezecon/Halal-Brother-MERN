@@ -92,7 +92,7 @@ export default function ItemCard({ data }) {
         onClick={() => handleNavigate(_id)}
       />
       <div className="p-2">
-        <p className="text-lg font-semibold text-gray-800 truncate">{name}</p>
+        <p className="text-lg font-semibold text-gray-800 truncate playwrite-gb-s-regular">{name}</p>
         <p className="text-2xl font-bold crimson">৳{price}</p>
         <div className="my-2">
           <button

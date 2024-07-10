@@ -89,31 +89,35 @@ export default function Order() {
       <h1 className="text-center font-bold text-3xl mb-6">Order</h1>
       <div className="border border-gray-300 rounded-lg p-4">
         <div className="space-y-4">
+          <div className="hidden md:grid md:grid-cols-5 gap-4 p-4 font-bold bg-gray-100">
+            <div>Products</div>
+            <div>Date</div>
+            <div>Time</div>
+            <div>Status</div>
+            <div>Total</div>
+          </div>
           {data.reverse().map((item) => {
             let total = 0; 
             const { date, time } = splitDateTime(item.purchasedAt);
             return (
               <div
                 key={item.id}
-                className="border border-gray-200 rounded-lg p-4 bg-white shadow-sm flex flex-col md:flex-row md:items-center justify-between space-y-2 md:space-y-0"
+                className="border border-gray-200 rounded-lg p-4 bg-white shadow-sm grid grid-cols-1 md:grid-cols-5 gap-4"
               >
-                <div className="flex">
-                  <p className="font-bold">Products:</p>
-                  <div>
-                    {item.productDetails.map((product) => {
-                      total += product.price; 
-                      return (
-                        <p key={product.id} className="flex p-2">
-                          <img className="w-8 mr-2" src={product.image} alt={product.name} /> - {product.name}
-                        </p>
-                      );
-                    })}
-                  </div>
+                <div>
+                  {item.productDetails.map((product) => {
+                    total += product.price; 
+                    return (
+                      <p key={product.id} className="flex p-2">
+                        <img className="w-8 mr-2" src={product.image} alt={product.name} /> - {product.name}
+                      </p>
+                    );
+                  })}
                 </div>
-                <p>Date: {date}</p>
-                <p>Time: {time}</p>
-                <p>Status: {item.status}</p>
-                <p>Total: <br /> ৳{total}</p>
+                <p>{date}</p>
+                <p>{time}</p>
+                <p>{item.status}</p>
+                <p>৳{total}</p>
               </div>
             );
           })}

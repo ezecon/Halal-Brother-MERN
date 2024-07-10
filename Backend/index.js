@@ -54,6 +54,10 @@ const income = require('./routes/TotalIncome.js')
 app.use('/api/incomes',income);
 
 
+const discount = require('./routes/TotalIncome.js')
+app.use('/api/discounts',discount);
+
+
 
 //start server
 

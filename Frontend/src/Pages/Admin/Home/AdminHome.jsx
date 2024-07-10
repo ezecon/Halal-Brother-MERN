@@ -5,16 +5,15 @@ import {
   Tab,
   TabPanel,
 } from "@material-tailwind/react";
-import { Inventory } from "../Inventory/Inventory/Inventory";
 import Reservation from "./Reservation";
 import OfflineOrder from "../OfflineOrder/OfflineOrder";
-import Income from "../Income/Income";
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { useToken } from "../../../Componants/Hook/useToken";
 import { useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
 import { History } from "../History/History";
+import { Others } from "../Others/Others";
 
 export function AdminHome() {
   const data = [
@@ -34,14 +33,9 @@ export function AdminHome() {
       desc: <Reservation />,
     },
     {
-      label: "INCOME",
-      value: "income",
-      desc: <Income />,
-    },
-    {
-      label: "INVENTORY",
-      value: "inventory",
-      desc: <Inventory />,
+      label: "OTHERS",
+      value: "OTHERS",
+      desc: <Others />,
     },
   ];
 

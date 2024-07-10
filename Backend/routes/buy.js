@@ -19,10 +19,23 @@ router.post('/', async (req, res) => {
 });
 
 
-//find by user id
+//find by user
 router.get('/', async (req, res) => {
   try {
     const item = await Purchase.find();
+    if (item) {
+      res.status(200).json(item);
+    } else {
+      res.status(404).json({ message: 'Item not found' });
+    }
+  } catch (error) {
+    res.status(500).json({ message: 'Server error', error });
+  }
+});
+//find by user id
+router.get('/:id', async (req, res) => {
+  try {
+    const item = await Purchase.find(req.params.id);
     if (item) {
       res.status(200).json(item);
     } else {

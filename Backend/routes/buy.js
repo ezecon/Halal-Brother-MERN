@@ -32,10 +32,11 @@ router.get('/', async (req, res) => {
     res.status(500).json({ message: 'Server error', error });
   }
 });
-//find by user id
+
+// Find by user ID
 router.get('/:id', async (req, res) => {
   try {
-    const item = await Purchase.find(req.params.id);
+    const item = await Purchase.findById(req.params.id);
     if (item) {
       res.status(200).json(item);
     } else {
@@ -45,6 +46,7 @@ router.get('/:id', async (req, res) => {
     res.status(500).json({ message: 'Server error', error });
   }
 });
+
 
 
 

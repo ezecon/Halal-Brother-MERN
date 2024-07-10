@@ -163,6 +163,7 @@ export default function OfflineOrder() {
     }
     handleAutoDelete();
     handleTotalIncome();
+    handlePrint();
   };
 
   return (
@@ -207,12 +208,11 @@ export default function OfflineOrder() {
                 <p className="flex mb-2" key={item.id}><img className="w-8 mr-1" src={item.image} alt="" /> - Name: {item.name} - Price: {item.price}</p>
               ))}
               <p>Total: {total}</p>
-              <Button onClick={handleOfflineOrder}>Done</Button>
+              <Button onClick={handleOfflineOrder}>Done with Payment Slip</Button>
               <Button onClick={handleAutoDelete} className="m-5 bg-red-800">Clear</Button>
               {showSlip && (
                 <>
                   <OrderSlip ref={slipRef} order={order} />
-                  <Button onClick={handlePrint} className="mt-4">Print Slip</Button>
                 </>
               )}
             </div>

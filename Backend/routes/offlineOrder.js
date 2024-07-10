@@ -19,7 +19,7 @@ router.post('/', async (req, res) => {
 });
 
 
-//find by user id
+//find all
 router.get('/', async (req, res) => {
   try {
     const item = await offlineOrder.find();
@@ -32,7 +32,6 @@ router.get('/', async (req, res) => {
     res.status(500).json({ message: 'Server error', error });
   }
 });
-
 
 
 module.exports = router;

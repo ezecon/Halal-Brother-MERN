@@ -5,7 +5,6 @@ import {
   Tab,
   TabPanel,
 } from "@material-tailwind/react";
-import AllOrder from "../AllOrder/AllOrder";
 import { Inventory } from "../Inventory/Inventory/Inventory";
 import Reservation from "./Reservation";
 import OfflineOrder from "../OfflineOrder/OfflineOrder";
@@ -15,13 +14,14 @@ import axios from "axios";
 import { useToken } from "../../../Componants/Hook/useToken";
 import { useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
+import { History } from "../History/History";
 
 export function AdminHome() {
   const data = [
     {
-      label: "ONLINE ORDERS",
-      value: "online",
-      desc: <AllOrder />,
+      label: "ORDERS HISTORY",
+      value: "HISTORY",
+      desc: <History />,
     },
     {
       label: "OFFLINE ORDERS",

@@ -20,9 +20,9 @@ router.post('/', async (req, res) => {
 
 
 //find by user id
-router.get('/:userID', async (req, res) => {
+router.get('/', async (req, res) => {
   try {
-    const item = await Purchase.find({ userID: req.params.userID });
+    const item = await Purchase.find();
     if (item) {
       res.status(200).json(item);
     } else {
@@ -32,6 +32,9 @@ router.get('/:userID', async (req, res) => {
     res.status(500).json({ message: 'Server error', error });
   }
 });
+
+
+
 //find by user id
 router.put('/:id', async (req, res) => {
   try {

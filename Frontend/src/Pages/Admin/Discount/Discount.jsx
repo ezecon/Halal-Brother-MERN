@@ -73,7 +73,7 @@ export default function Discount() {
         <ul className="space-y-4">
           {discounts.map((discount) => (
             <li key={discount._id} className="bg-gray-100 p-4 rounded-lg flex justify-between items-center">
-              <img src={discount.image} alt="Discount" className="w-full h-auto" />
+              <img src={discount.image} alt="Discount" className="w-24 h-auto" />
               <Button color="red" onClick={() => handleDelete(discount._id)}>Delete</Button>
             </li>
           ))}

@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { useForm } from "react-hook-form";
 import { Button, Dialog, DialogBody, DialogHeader, Option, Select, Spinner } from "@material-tailwind/react";
 import { useNavigate } from "react-router-dom";
@@ -6,6 +6,8 @@ import { useToken } from '../../../Componants/Hook/useToken';
 import axios from 'axios';
 import ItemCard from "./ItemCard";
 import toast from "react-hot-toast";
+import OrderSlip from "./OrderSlip";
+import { useReactToPrint } from "react-to-print";
 
 export default function OfflineOrder() {
   const [products, setProducts] = useState([]);
@@ -17,12 +19,22 @@ export default function OfflineOrder() {
   const [productsName, setProductsName] = useState([]);
   const [productsID, setProductID] = useState([]);
   const [total, setTotal] = useState(0);
+  const [showSlip, setShowSlip] = useState(false);
+  const [order, setOrder] = useState(null);
 
   const { token, removeToken } = useToken();
   const navigate = useNavigate();
   const [adminID, setAdminID] = useState(null);
 
+  const slipRef = useRef();
+
+  const { register, handleSubmit, formState: { errors } } = useForm();
+
   const handleOpen = () => setOpen(!open);
+
+  const handlePrint = useReactToPrint({
+    content: () => slipRef.current,
+  });
 
   useEffect(() => {
     const verifyToken = async () => {
@@ -60,11 +72,10 @@ export default function OfflineOrder() {
       const tempProductsName = customer.map(item => {
         tempTotal += item.price;
         return item.name;
-      })
+      });
       const tempProductID = customer.map(item => {
         return item.itemID;
-      }
-    );
+      });
       setProductID(tempProductID);
       setTotal(tempTotal);
       setProductsName(tempProductsName);
@@ -84,15 +95,13 @@ export default function OfflineOrder() {
     filterProducts(category);
   };
 
-  const { register, handleSubmit, formState: { errors } } = useForm();
-
   const onSubmit = (data) => {
     console.log(data);
     // Handle form submission if needed
   };
 
   if (loading) {
-    return <div className="flex gap-2 mt-10 text-center"> <Spinner className="h-8 w-8" />Loading...</div>;
+    return <div className="flex gap-2 mt-10 text-center"><Spinner className="h-8 w-8" />Loading...</div>;
   }
 
   const handleUser = async (id) => {
@@ -109,30 +118,31 @@ export default function OfflineOrder() {
       console.error(err);
     }
   };
- const handleAutoDelete = async()=>{
-    try {
-        await axios.delete(`https://halal-brother-server.vercel.app/api/carts/delete/${adminID}`);
-        const promise = await axios.get(`https://halal-brother-server.vercel.app/api/carts/admin/${adminID}`);
-        setCustomer(promise.data);
-      } catch (err) {
-        console.error("Error:", err);
-      }
- }
 
- const handleTotalIncome = async ()=>{
-  try{
-    const response = await axios.post(`https://halal-brother-server.vercel.app/api/incomes`,{
-      userID: adminID,
-      income: total,
-    });
-    if(response.status===200){
-      console.log('money sent to cash')
+  const handleAutoDelete = async () => {
+    try {
+      await axios.delete(`https://halal-brother-server.vercel.app/api/carts/delete/${adminID}`);
+      const promise = await axios.get(`https://halal-brother-server.vercel.app/api/carts/admin/${adminID}`);
+      setCustomer(promise.data);
+    } catch (err) {
+      console.error("Error:", err);
     }
-  }
-  catch(err){
-    console.log(err)
-  }
- }
+  };
+
+  const handleTotalIncome = async () => {
+    try {
+      const response = await axios.post(`https://halal-brother-server.vercel.app/api/incomes`, {
+        userID: adminID,
+        income: total,
+      });
+      if (response.status === 200) {
+        console.log('money sent to cash');
+      }
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
   const handleOfflineOrder = async () => {
     try {
       const response = await axios.post('https://halal-brother-server.vercel.app/api/offline-order', {
@@ -143,6 +153,8 @@ export default function OfflineOrder() {
       });
       if (response.status === 200) {
         toast.success("Order Done");
+        setShowSlip(true);
+        setOrder({ productDetails: customer });
       } else {
         toast.error("Something went wrong");
       }
@@ -197,6 +209,12 @@ export default function OfflineOrder() {
               <p>Total: {total}</p>
               <Button onClick={handleOfflineOrder}>Done</Button>
               <Button onClick={handleAutoDelete} className="m-5 bg-red-800">Clear</Button>
+              {showSlip && (
+                <>
+                  <OrderSlip ref={slipRef} order={order} />
+                  <Button onClick={handlePrint} className="mt-4">Print Slip</Button>
+                </>
+              )}
             </div>
           ) : (
             <p className="playwrite-gb-s-regular">Empty</p>

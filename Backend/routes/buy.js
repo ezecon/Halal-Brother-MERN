@@ -36,7 +36,7 @@ router.get('/', async (req, res) => {
 // Find by user ID
 router.get('/:id', async (req, res) => {
   try {
-    const item = await Purchase.findById(req.params.id);
+    const item = await Purchase.find({userID:req.params.id});
     if (item) {
       res.status(200).json(item);
     } else {

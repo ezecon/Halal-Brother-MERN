@@ -37,6 +37,16 @@ export default function Discount() {
     }
   };
 
+  const handleDelete = async (id) => {
+    try {
+      await axios.delete(`https://halal-brother-server.vercel.app/api/discounts/${id}`);
+      toast.success('Discount deleted successfully!');
+      fetchDiscounts();
+    } catch (error) {
+      toast.error('Failed to delete discount. Please try again.');
+    }
+  };
+
   return (
     <div className="flex flex-col items-center justify-center">
       <Toaster />
@@ -62,8 +72,9 @@ export default function Discount() {
         <h1 className="text-2xl font-semibold mb-4 text-center">DISCOUNT LIST</h1>
         <ul className="space-y-4">
           {discounts.map((discount) => (
-            <li key={discount._id} className="bg-gray-100 p-4 rounded-lg">
+            <li key={discount._id} className="bg-gray-100 p-4 rounded-lg flex justify-between items-center">
               <img src={discount.image} alt="Discount" className="w-full h-auto" />
+              <Button color="red" onClick={() => handleDelete(discount._id)}>Delete</Button>
             </li>
           ))}
         </ul>

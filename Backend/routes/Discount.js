@@ -2,41 +2,44 @@ const express = require('express');
 const router = express.Router();
 const Discount = require('../models/Discount');
 
-// Add item to cart
+// Add a discount
 router.post('/', async (req, res) => {
-    const {  image,} = req.body;
+  const { image } = req.body;
 
-    try {
-        const newCartItem = new Discount({  image, });
-        await newCartItem.save();
-        res.status(201).json(newCartItem);
-    } catch (error) {
-        res.status(500).json({ message: 'Server error', error });
-    }
+  try {
+    const newDiscount = new Discount({ image });
+    await newDiscount.save();
+    res.status(201).json(newDiscount);
+  } catch (error) {
+    res.status(500).json({ message: 'Server error', error });
+  }
 });
 
+// Get all discounts
 router.get('/', async (req, res) => {
-    try {
-        const items = await Item.find();
-        res.status(200).json(items);
-    } catch (err) {
-        res.status(500).json({ message: err.message });
-    }
+  try {
+    const discounts = await Discount.find();
+    res.status(200).json(discounts);
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
 });
 
-
+// Delete a discount
 router.delete('/:itemId', async (req, res) => {
-    const { itemId } = req.params;
+  const { itemId } = req.params;
 
-    try {
-        const deletedItem = await Cart.findOneAndDelete({ _id: itemId });
+  try {
+    const deletedItem = await Discount.findOneAndDelete({ _id: itemId });
 
-        if (!deletedItem) {
-            return res.status(404).json({ message: 'Item not found in database' });
-        }
-
-        res.status(200).json({ message: 'discount deleted successfully', deletedItem });
-    } catch (error) {
-        res.status(500).json({ message: 'Server error', error });
+    if (!deletedItem) {
+      return res.status(404).json({ message: 'Discount not found' });
     }
+
+    res.status(200).json({ message: 'Discount deleted successfully', deletedItem });
+  } catch (error) {
+    res.status(500).json({ message: 'Server error', error });
+  }
 });
+
+module.exports = router;

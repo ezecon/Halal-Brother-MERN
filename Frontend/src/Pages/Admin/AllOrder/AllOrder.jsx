@@ -55,11 +55,9 @@ export default function AllOrder() {
   useEffect(() => {
     const fetchOrderData = async () => {
       try {
-        console.log("Fetching orders...");
         const response = await axios.get(`https://halal-brother-server.vercel.app/api/buy-products/`);
         const orders = response.data;
-        console.log("Orders fetched:", orders);
-  
+
         const productDetails = await Promise.all(
           orders.map(async (order) => {
             const productResponses = await Promise.all(
@@ -71,22 +69,19 @@ export default function AllOrder() {
             return { ...order, productDetails: productResponses };
           })
         );
-  
-        console.log("Product details fetched:", productDetails);
+
         setData(productDetails);
         setLoading(false); 
       } catch (err) {
-        console.error("Error fetching data:", err.message);
         setError(err.message);
         setLoading(false); 
       }
     };
-  
+
     if (userID) {
       fetchOrderData();
     }
   }, [userID]);
-  
 
   if (loading) {
     return <p className="text-center">Loading...</p>; 
@@ -153,7 +148,7 @@ export default function AllOrder() {
       setError(err.message);
     }
   };
-
+  const reversedData = [...data].reverse();
   return (
     <div className="mt-10 p-6">
       <h1 className="text-center font-bold text-3xl mb-6">Online Order</h1>
@@ -170,44 +165,44 @@ export default function AllOrder() {
             </tr>
           </thead>
           <tbody className="bg-white divide-y divide-gray-200">
-            {data.reverse().map((item) => {
-              let total = 0; 
-              const { date, time } = splitDateTime(item.purchasedAt);
-              return (
-                <tr key={item._id}>
-                  <td className="px-6 py-4 whitespace-nowrap">
-                    {item.productDetails.map((product) => {
-                      total += product.price;
-                      return (
-                        <div key={product._id} className="flex p-2">
-                          <img className="w-8 mr-2" src={product.image} alt={product.name} /> - {product.name}
-                        </div>
-                      );
-                    })}
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap">{date}</td>
-                  <td className="px-6 py-4 whitespace-nowrap">{time}</td>
-                  <td className="px-6 py-4 whitespace-nowrap">{item.status}</td>
-                  <td className="px-6 py-4 whitespace-nowrap">৳{total}</td>
-                  <td className="px-6 py-4 whitespace-nowrap flex items-center space-x-2">
-                    {item.status !== 'Delivered' && (
-                      <Menu>
-                        <MenuHandler>
-                          <Button>Change Status</Button>
-                        </MenuHandler>
-                        <MenuList>
-                          <MenuItem onClick={() => handleStatusChange(item._id, 'Accepted-Order', total)}>Accepted Order</MenuItem>
-                          <MenuItem onClick={() => handleStatusChange(item._id, 'On the way', total)}>On the way</MenuItem>
-                          <MenuItem onClick={() => handleStatusChange(item._id, 'Delivered', total)}>Delivered</MenuItem>
-                          <MenuItem onClick={() => handleStatusChange(item._id, 'Rejected', total)}>Reject</MenuItem>
-                        </MenuList>
-                      </Menu>
-                    )}
-                    <Button onClick={() => handleDetailsClick(item)}>Details</Button>
-                  </td>
-                </tr>
-              );
-            })}
+          {reversedData.map((item) => {
+        let total = 0;
+        const { date, time } = splitDateTime(item.purchasedAt);
+        return (
+          <tr key={item._id}>
+            <td className="px-6 py-4 whitespace-nowrap">
+              {item.productDetails.map((product) => {
+                total += product.price;
+                return (
+                  <div key={product._id} className="flex p-2">
+                    <img className="w-8 mr-2" src={product.image} alt={product.name} /> - {product.name}
+                  </div>
+                );
+              })}
+            </td>
+            <td className="px-6 py-4 whitespace-nowrap">{date}</td>
+            <td className="px-6 py-4 whitespace-nowrap">{time}</td>
+            <td className="px-6 py-4 whitespace-nowrap">{item.status}</td>
+            <td className="px-6 py-4 whitespace-nowrap">৳{total}</td>
+            <td className="px-6 py-4 whitespace-nowrap flex items-center space-x-2">
+              {item.status !== 'Delivered' && (
+                <Menu>
+                  <MenuHandler>
+                    <Button>Change Status</Button>
+                  </MenuHandler>
+                  <MenuList>
+                    <MenuItem onClick={() => handleStatusChange(item._id, 'Accepted-Order', total)}>Accepted Order</MenuItem>
+                    <MenuItem onClick={() => handleStatusChange(item._id, 'On the way', total)}>On the way</MenuItem>
+                    <MenuItem onClick={() => handleStatusChange(item._id, 'Delivered', total)}>Delivered</MenuItem>
+                    <MenuItem onClick={() => handleStatusChange(item._id, 'Rejected', total)}>Reject</MenuItem>
+                  </MenuList>
+                </Menu>
+              )}
+              <Button onClick={() => handleDetailsClick(item)}>Details</Button>
+            </td>
+          </tr>
+        );
+      })}
           </tbody>
         </table>
       </div>

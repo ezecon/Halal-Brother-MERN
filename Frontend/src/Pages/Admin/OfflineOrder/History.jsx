@@ -48,7 +48,7 @@ export default function OfflineHistory() {
         const productDetails = await Promise.all(
           orders.map(async (order) => {
             const productResponses = await Promise.all(
-              order.products.map(async (productId) => {
+              order.productsID.map(async (productId) => {
                 const productResponse = await axios.get(`https://halal-brother-server.vercel.app/api/items/${productId}`);
                 return productResponse.data;
               })
@@ -86,7 +86,7 @@ export default function OfflineHistory() {
   }
 
 
-
+  const reversedData = [...data].reverse();
   return (
     <div className="mt-10 p-6">
       <h1 className="text-center font-bold text-3xl mb-6">Offline Order</h1>
@@ -97,33 +97,31 @@ export default function OfflineHistory() {
               <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Products</th>
               <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Date</th>
               <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Time</th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
               <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Total</th>
             </tr>
           </thead>
           <tbody className="bg-white divide-y divide-gray-200">
-            {data.reverse().map((item) => {
-              let total = 0; 
-              const { date, time } = splitDateTime(item.purchasedAt);
-              return (
-                <tr key={item._id}>
-                  <td className="px-6 py-4 whitespace-nowrap">
-                    {item.productDetails.map((product) => {
-                      total += product.price;
-                      return (
-                        <div key={product._id} className="flex p-2">
-                          <img className="w-8 mr-2" src={product.image} alt={product.name} /> - {product.name}
-                        </div>
-                      );
-                    })}
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap">{date}</td>
-                  <td className="px-6 py-4 whitespace-nowrap">{time}</td>
-                  <td className="px-6 py-4 whitespace-nowrap">{item.status}</td>
-                  <td className="px-6 py-4 whitespace-nowrap">৳{total}</td>
-                </tr>
-              );
-            })}
+          {reversedData.map((item) => {
+          let total = 0; 
+          const { date, time } = splitDateTime(item.purchasedAt);
+          return (
+            <tr key={item._id}>
+              <td className="px-6 py-4 whitespace-nowrap">
+                {item.productDetails.map((product) => {
+                  total += product.price;
+                  return (
+                    <div key={product._id} className="flex p-2">
+                      <img className="w-8 mr-2" src={product.image} alt={product.name} /> - {product.name}
+                    </div>
+                  );
+                })}
+              </td>
+              <td className="px-6 py-4 whitespace-nowrap">{date}</td>
+              <td className="px-6 py-4 whitespace-nowrap">{time}</td>
+              <td className="px-6 py-4 whitespace-nowrap">৳{total}</td>
+            </tr>
+          );
+        })}
           </tbody>
         </table>
       </div>
